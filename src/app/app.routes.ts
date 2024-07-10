@@ -14,6 +14,15 @@ export const routes: Routes = [
     path: "",
     redirectTo: "/main",
     pathMatch: "full"
+  },
+  {
+    path: 'auth/login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'chats',
+    redirectTo: '/tabs/chats',
+    pathMatch: 'full'
   }
   
 ];

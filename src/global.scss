@@ -1,8 +1,8 @@
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
-@import 'tailwindcss/components';
+@import "tailwindcss/components";
 
-@import 'tailwindcss/utilities';
+@import "tailwindcss/utilities";
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-@import url('https://fonts.cdnfonts.com/css/poppins');
+@import url("https://fonts.cdnfonts.com/css/poppins");
 
 /**
  * Ionic Dark Mode
@@ -41,4 +41,56 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+.custom {
+  --background: rgb(240, 249, 253);
+  border: none;
+  outline: blue;
+  --border-color: blue;
+}
+
+.custon:focus {
+  border: none;
+  --tw-ring-shadow: 0 0 0 0px rgba(66, 153, 225, 0.5);
+  --tw-ring-color: transparent;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: transparent;
+}
+
+.ion-page-invisible {
+  opacity: 100% !important;
+}
+
+.custom-loading .loading-wrapper {
+  background: rgba(0, 0, 0, 0.8); /* Fondo semi-transparente */
+  color: #fff; /* Color del texto */
+  border-radius: 10px; /* Bordes redondeados */
+  padding: 20px; /* Espaciado interno */
+}
+
+.custom-loading .spinner-crescent {
+  width: 50px;
+  height: 50px;
+  stroke: #fff; /* Color del spinner */
+}
+
+.custom-toast-success {
+  background: #012970;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.custom-toast-error {
+  background: rgba(255, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: #0054e9 !important;
+}

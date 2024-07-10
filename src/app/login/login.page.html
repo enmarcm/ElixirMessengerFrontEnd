@@ -1,0 +1,87 @@
+<ion-content [fullscreen]="true" class="h-screen relative">
+  <div class="absolute inset-0 z-0 overflow-hidden">
+    <svg
+      width="428"
+      height="926"
+      viewBox="0 0 428 926"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-full h-full object-cover"
+    >
+      <rect
+        x="-194.462"
+        y="576.051"
+        width="370"
+        height="370"
+        transform="rotate(27.0888 -194.462 576.051)"
+        stroke="#71F4FF"
+        stroke-width="2"
+      />
+      <rect
+        x="-305"
+        y="635"
+        width="370"
+        height="370"
+        stroke="#71F4FF"
+        stroke-width="2"
+      />
+      <circle cx="271" cy="77" r="246.5" stroke="#C8F9FF" stroke-width="3" />
+      <circle cx="431.5" cy="-38.5" r="317.5" fill="#C8F9FF" />
+    </svg>
+  </div>
+  <ion-grid
+    class="h-full overflow-hidden flex flex-col gap-2 box-border p-4 relative z-10"
+  >
+    <ion-row class="h-[40%]">
+      <ion-col
+        size="12"
+        class="flex flex-col gap-4 justify-center items-center h-full"
+      >
+        <ion-img
+          class="object-cover max-w-40 max-h-40"
+          src="../../assets/images/elixir-icon.svg"
+        ></ion-img>
+        <h1 class="text-2xl font-poppins font-semibold">Ingresa aquí</h1>
+      </ion-col>
+    </ion-row>
+    <ion-row class="h-[60%] flex flex-col items-center justify-start">
+      <ion-col
+        size="12"
+        class="h-full flex flex-col gap-5 justify-start items-center"
+      >
+        <ion-input
+          label="Usuario"
+          labelPlacement="stacked"
+          fill="outline"
+          placeholder="enmarcm"
+          color="secondary"
+          class="custom-input"
+          [(ngModel)]="loginData.userName"
+        ></ion-input>
+
+        <ion-input
+          label="Contraseña"
+          fill="outline"
+          placeholder="12345678."
+          color="secondary"
+          labelPlacement="stacked"
+          class="custom-input border-none"
+          type="password"
+          [(ngModel)]="loginData.password"
+        >
+          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+        </ion-input>
+
+        <div class="mt-[-1rem] ms-auto">
+          <ion-button fill="clear" color="dark"
+            >Olvido su contraseña?</ion-button
+          >
+        </div>
+
+        <ion-button color="primary" shape="round" class="p-4 w-full" (click)="login()">
+          <span class="font-semibold text-lg font-poppins">Ingresar</span>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
