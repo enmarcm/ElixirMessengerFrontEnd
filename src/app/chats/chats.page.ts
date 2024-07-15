@@ -9,16 +9,32 @@ import {
   IonList,
   IonItem,
   IonThumbnail,
-  IonLabel, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
+  IonLabel,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonPopover,
+  IonButton,
+  IonIcon,
+} from '@ionic/angular/standalone';
 import { ChatsPageMock } from 'src/mocks/chatsPageMock';
 import { ChatsWrapperComponent } from '../chats-wrapper/chats-wrapper.component';
+import { Router } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { ellipsisVerticalOutline, searchOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-chats',
   templateUrl: './chats.page.html',
   styleUrls: ['./chats.page.scss'],
   standalone: true,
-  imports: [IonCol, IonRow, IonGrid, 
+  imports: [
+    IonIcon,
+    IonButton,
+    IonPopover,
+    IonCol,
+    IonRow,
+    IonGrid,
     IonLabel,
     IonItem,
     IonList,
@@ -35,7 +51,18 @@ import { ChatsWrapperComponent } from '../chats-wrapper/chats-wrapper.component'
 export class ChatsPage implements OnInit {
   public chats = ChatsPageMock;
 
-  constructor() {}
+  constructor(private router: Router) {
+    addIcons({ searchOutline, ellipsisVerticalOutline });
+  }
 
   ngOnInit() {}
+
+  openSettings() {
+    this.router.navigate(['/settings']);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/main']);
+  }
 }

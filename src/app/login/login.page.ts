@@ -41,7 +41,8 @@ export class LoginPage implements OnInit {
   constructor(
     private toastService: ToastService,
     private fetchesServices: FetchesService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {}
 
   async ngOnInit() {
@@ -82,6 +83,8 @@ export class LoginPage implements OnInit {
         message: 'Error al iniciar sesión',
         type: 'danger',
       });
+    } finally {
+      this.loadingService.hideLoading();
     }
   }
 
