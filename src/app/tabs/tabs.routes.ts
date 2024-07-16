@@ -26,6 +26,11 @@ export const routes: Routes = [
         redirectTo: '/tabs/chats',
         pathMatch: 'full',
       },
+      {
+        path: 'chat/:idUser',
+        loadComponent: () =>
+          import('../chat/chat.page').then((m) => m.ChatPage),
+      },
     ],
   },
   {

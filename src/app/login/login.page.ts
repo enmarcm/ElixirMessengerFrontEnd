@@ -57,6 +57,7 @@ export class LoginPage implements OnInit {
   }
 
   private setToken = (token: string) => localStorage.setItem('token', token);
+  private setUserId = (userId: string) => localStorage.setItem('userId', userId);
 
   async login() {
     try {
@@ -69,6 +70,8 @@ export class LoginPage implements OnInit {
       const token = resultLogin.token.split('Bearer ')[1];
 
       this.setToken(token);
+
+      this.setUserId(resultLogin.idUser)
 
       await this.toastService.showToast({
         message: 'Inicio de sesión exitoso',
