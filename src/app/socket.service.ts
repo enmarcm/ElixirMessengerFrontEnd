@@ -36,20 +36,25 @@ export class ChatService {
     });
   }
 
-  sendMessage(receiverId: string, message: string) {
+  sendMessage(receiverId: string, message: string, type = "text") {
     console.log(`Enviando mensaje a ${receiverId}: ${message}`);
     const senderId = localStorage.getItem('userId');
 
     const messageObj = {
       sender: senderId,
       receiver: receiverId,
-      message,
+      message: {
+        type,
+        content: message
+      }
     };
-
-    this.socket.emit('privateMessage', messageObj);
 
     // Notificar a los observadores sobre el mensaje saliente
     this.outgoingMessages.next(messageObj);
+
+
+    this.socket.emit('privateMessage', messageObj);
+
   }
 
   listenForIncomingMessages(): Observable<any> {

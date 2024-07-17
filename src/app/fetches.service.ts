@@ -105,6 +105,24 @@ export class FetchesService {
         )
     );
   }
+
+  obtainUserInfo(idUser: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.GET_USER_INFO}/${idUser}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
 }
 
 type typeMessage = 'text' | 'image' | 'audio';

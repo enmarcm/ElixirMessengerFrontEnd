@@ -14,6 +14,7 @@ import {
   IonAvatar,
   IonButtons,
   IonBackButton,
+  IonThumbnail,
 } from '@ionic/angular/standalone';
 import { ChatService } from '../socket.service';
 import { ActivatedRoute } from '@angular/router';
@@ -42,6 +43,7 @@ import { FetchesService } from '../fetches.service';
     IonToolbar,
     CommonModule,
     FormsModule,
+    IonThumbnail,
   ],
 })
 export class ChatPage implements OnInit {
@@ -49,6 +51,7 @@ export class ChatPage implements OnInit {
   public newMessage: string = 'value';
   public receiverId = '';
   public chatId = '';
+  public userReceiverInfo = {} as UserInfo;
 
   constructor(
     private chatService: ChatService,
@@ -67,6 +70,7 @@ export class ChatPage implements OnInit {
     });
 
     await this.obtainMessages();
+    this.obtainUserInfo();
 
     this.chatService.socket.on('privateMessage', (message: any) => {
       const newMessage = {
@@ -121,6 +125,24 @@ export class ChatPage implements OnInit {
     return;
   }
 
+  private async obtainUserInfo() {
+    try {
+      const userInfo = (await this.fetches.obtainUserInfo(
+        this.receiverId
+      )) as UserInfo;
+
+      this.userReceiverInfo = userInfo;
+    } catch (error) {
+      this.toast.showToast({
+        message: 'Error al obtener información del usuario',
+        type: 'danger',
+      });
+      return;
+    }finally{
+      this.loading.hideLoading();
+    }
+  }
+
   private async addToBDD({
     idReceiver,
     typeMessage,
@@ -161,3 +183,12 @@ export class ChatPage implements OnInit {
 }
 
 type typeMessage = 'text' | 'image' | 'audio';
+
+interface UserInfo {
+  userName: string;
+  email: string;
+  role: string;
+  image: string;
+  dateOfBirth: string;
+  id: string;
+}

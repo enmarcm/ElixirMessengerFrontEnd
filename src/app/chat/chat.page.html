@@ -3,37 +3,45 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/chats"></ion-back-button>
     </ion-buttons>
-    <ion-title class="text-white text-lg">Chat con</ion-title>
-    <!-- Agrega aquí la miniatura de la foto del usuario -->
+
+    <div class="flex">
+      <div>
+        <ion-thumbnail>
+          <img [src]="userReceiverInfo.image" class="h-12 w-12 rounded-full" />
+        </ion-thumbnail>
+      </div>
+
+      <div class="flex-grow flex">
+        <ion-title class="text-white text-lg"
+          >{{userReceiverInfo.userName}}</ion-title
+        >
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="bg-gray-200 p-4">
-  
   @if(messages.length > 0){
-    <ion-list >
-      <ion-item
-        *ngFor="let message of messages"
-        lines="none"
-        class="rounded-xl my-2 max-w-3/4"
+  <ion-list class="mb-16">
+    @for(message of messages; track message.id){
+    <ion-item class="rounded-lg my-2 w-3/4" lines="none">
+      <div
+        class="flex flex-col p-2 w-full"
+        [class]="message.isSentByMe ? 'items-end ' : 'items-start'"
       >
-        <!-- [class]="message.isSentByMe ? 'bg-blue-400' : 'bg-green-500'" -->
-        <div
-          class="flex flex-col p-2"
-          [class]="message.isSentByMe ? 'items-end ' : 'items-start'"
-        >
-          <div class="text-sm font-semibold">
-            {{ message.senderData.userName }}
-          </div>
-          <div
-            class="text-md mt-1 rounded-lg p-2"
-            [class]="message.isSentByMe ? 'bg-blue-400 shadow-md' : 'bg-green-500 shadow-md'"
-          >
-            {{ message.message.content }}
-          </div>
+        <div class="text-sm font-semibold">
+          {{ message.senderData.userName }}
         </div>
-      </ion-item>
-    </ion-list>
+        <div
+          class="text-md mt-1 rounded-lg p-2"
+          [class]="message.isSentByMe ? 'bg-blue-400 shadow-md' : 'bg-green-500 shadow-md'"
+        >
+          {{ message.message.content }}
+        </div>
+      </div>
+    </ion-item>
+    }
+  </ion-list>
   }
 
   <ion-item
