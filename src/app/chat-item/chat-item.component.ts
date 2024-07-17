@@ -1,37 +1,96 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { IonItem, IonLabel, IonThumbnail, IonModal, IonTitle, IonHeader, IonToolbar, IonGrid, IonRow, IonCol } from '@ionic/angular/standalone';
+import {
+  IonItem,
+  IonLabel,
+  IonThumbnail,
+  IonModal,
+  IonTitle,
+  IonHeader,
+  IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'chat-item',
   templateUrl: './chat-item.component.html',
   styleUrls: ['./chat-item.component.scss'],
   standalone: true,
-  imports: [IonCol, IonRow, IonGrid, IonToolbar, IonHeader, IonTitle, IonModal, IonItem, IonLabel, CommonModule, IonThumbnail],
+  imports: [
+    IonCol,
+    IonRow,
+    IonGrid,
+    IonToolbar,
+    IonHeader,
+    IonTitle,
+    IonModal,
+    IonItem,
+    IonLabel,
+    CommonModule,
+    IonThumbnail,
+  ],
 })
 export class ChatItemComponent implements OnInit {
   @Input() chat = DefaultChatItem;
 
-
   constructor() {}
   ngOnInit() {}
-
 }
 
 const DefaultChatItem: ChatItem = {
-  id: 'Chat 2',
-  avatar: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-  name: 'Chat 2',
-  lastMessage: 'Último mensaje del chat 2',
-  lastMessageDate: new Date(),
-  unreadCount: 0,
+  idUser: '66880fbf303a3d97891f2f4d',
+  idUserReceiver: '66880fbf303a3d97891f2908',
+  id: '6696a0dcba1e95a977c83f1b',
+  lastMessageContent: {
+    idUserSender: '66880fbf303a3d97891f2f4d',
+    content: {
+      type: 'text',
+      message: 'Como estas amigo',
+    },
+    date: '2024-07-16T21:03:28.308Z',
+    read: false,
+    id: '6696e0204ce10e26a6ba7eff',
+  },
+  userLastMessage: {
+    userName: 'enmarcm',
+    image:
+      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
+    id: '66880fbf303a3d97891f2f4d',
+  },
+  userReceiver: {
+    userName: 'syragon',
+    image:
+      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
+    id: '66880fbf303a3d97891f2908',
+  },
 };
 
 interface ChatItem {
+  idUser: string;
+  idUserReceiver: string;
   id: string;
-  name: string;
-  lastMessage: string;
-  lastMessageDate: Date;
-  avatar: string;
-  unreadCount: number;
+  lastMessageContent: LastMessageContent;
+  userLastMessage: UserLastMessage;
+  userReceiver: UserLastMessage;
+}
+
+interface UserLastMessage {
+  userName: string;
+  image: string;
+  id: string;
+}
+
+interface LastMessageContent {
+  idUserSender: string;
+  content: Content;
+  date: string;
+  read: boolean;
+  id: string;
+}
+
+interface Content {
+  type: string;
+  message: string;
 }

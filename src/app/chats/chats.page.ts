@@ -15,20 +15,19 @@ import {
   IonCol,
   IonPopover,
   IonButton,
-  IonIcon,
-} from '@ionic/angular/standalone';
+  IonIcon, IonFabButton, IonFab } from '@ionic/angular/standalone';
 import { ChatsPageMock } from 'src/mocks/chatsPageMock';
 import { ChatsWrapperComponent } from '../chats-wrapper/chats-wrapper.component';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { ellipsisVerticalOutline, searchOutline } from 'ionicons/icons';
+import { add, createOutline, ellipsisVerticalOutline, searchOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-chats',
   templateUrl: './chats.page.html',
   styleUrls: ['./chats.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonFab, IonFabButton, 
     IonIcon,
     IonButton,
     IonPopover,
@@ -52,8 +51,10 @@ export class ChatsPage implements OnInit {
   public chats = ChatsPageMock;
 
   constructor(private router: Router) {
-    addIcons({ searchOutline, ellipsisVerticalOutline });
+    addIcons({ searchOutline, ellipsisVerticalOutline , add, createOutline});
   }
+
+  
 
   ngOnInit() {}
 

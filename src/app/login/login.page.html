@@ -65,11 +65,14 @@
           placeholder="12345678."
           color="secondary"
           labelPlacement="stacked"
-          class="custom-input border-none"
+          class="custom-input border-none bg-transparent"
           type="password"
           [(ngModel)]="loginData.password"
         >
-          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          <ion-input-password-toggle
+            slot="end"
+            class="bg-transparent"
+          ></ion-input-password-toggle>
         </ion-input>
 
         <div class="mt-[-1rem] ms-auto">
@@ -78,7 +81,12 @@
           >
         </div>
 
-        <ion-button color="primary" shape="round" class="p-4 w-full" (click)="login()">
+        <ion-button
+          color="primary"
+          shape="round"
+          class="p-4 w-full"
+          (click)="login()"
+        >
           <span class="font-semibold text-lg font-poppins">Ingresar</span>
         </ion-button>
       </ion-col>

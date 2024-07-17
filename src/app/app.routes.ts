@@ -24,8 +24,8 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'chat/:idUser',
-    redirectTo: '/tabs/chat/:idUser',
+    path: 'chat/:idUser/:idChat',
+    redirectTo: '/tabs/chat/:idUser/:idChat',
     pathMatch: 'full',
   },
 ];
