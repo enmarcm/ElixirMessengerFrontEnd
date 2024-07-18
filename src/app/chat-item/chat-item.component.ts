@@ -33,10 +33,14 @@ import {
   ],
 })
 export class ChatItemComponent implements OnInit {
-  @Input() chat = DefaultChatItem;
+  @Input() chat = DefaultChatItem as any;
 
   constructor() {}
-  ngOnInit() {}
+  ngOnInit() {
+    
+    console.log('Este es el mensaje inicial')
+  console.log(this.chat.lastMessageContent);
+  }
 }
 
 const DefaultChatItem: ChatItem = {

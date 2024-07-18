@@ -30,6 +30,8 @@ export class ChatsWrapperComponent implements OnInit {
 
   async ngOnInit() {
     this.chats = await this.obtainChats();
+    console.log('Estos son los chats iniciales, revisar')
+    console.log(this.chats);
 
     this.chatService.connect();
     this.messageSubscription = this.chatService
@@ -42,11 +44,13 @@ export class ChatsWrapperComponent implements OnInit {
         if (chatIndex !== -1) {
           this.chats[chatIndex].lastMessageContent = {
             idUserSender: message.sender,
-            content: { type: 'text', message: message.message },
+            message: message.message,
             date: message.date,
             read: false,
             id: crypto.getRandomValues(new Uint32Array(1))[0].toString(),
           };
+
+          console.log(this.chats[chatIndex]);
         } else {
           this.obtainChats(1, false);
         }
@@ -57,18 +61,23 @@ export class ChatsWrapperComponent implements OnInit {
         (chat) => chat.idUserReceiver === message.receiver
       );
 
+      // console.log(message)
+
       if (chatIndex !== -1) {
         this.chats[chatIndex].lastMessageContent = {
           idUserSender: message.sender,
-          content: { type: 'text', message: message.message.content },
+          message: message.message,
           date: new Date().toISOString(),
           read: false,
           id: crypto.getRandomValues(new Uint32Array(1))[0].toString(),
         };
+
+        // console.log(this.chats[chatIndex]);
+  
       } else {
         this.obtainChats(1, false);
       }
-    })
+    });
   }
 
   async obtainChats(page = 1, loading = true) {
@@ -129,7 +138,7 @@ interface UserLastMessage {
 
 interface LastMessageContent {
   idUserSender: string;
-  content: Content;
+  message: Content;
   date: string;
   read: boolean;
   id: string;
@@ -137,5 +146,5 @@ interface LastMessageContent {
 
 interface Content {
   type: string;
-  message: string;
+  content: string;
 }

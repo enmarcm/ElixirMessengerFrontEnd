@@ -23,20 +23,18 @@
 <ion-content class="bg-gray-200 p-4">
   @if(messages.length > 0){
   <ion-list class="mb-16">
-    @for(message of messages; track message.id){
-    <ion-item class="rounded-lg my-2 w-3/4" lines="none">
+    @for(message of messages; track (message.id + chatId)){
+
+    <ion-item>
       <div
-        class="flex flex-col p-2 w-full"
-        [class]="message.isSentByMe ? 'items-end ' : 'items-start'"
+        class="flex w-full"
+        [class]="message.isSendByMe ? 'justify-end' : 'justify-start'"
       >
-        <div class="text-sm font-semibold">
-          {{ message.senderData.userName }}
-        </div>
         <div
-          class="text-md mt-1 rounded-lg p-2"
-          [class]="message.isSentByMe ? 'bg-blue-400 shadow-md' : 'bg-green-500 shadow-md'"
+          class="max-w-3/4 rounded-xl flex"
+          [class]="message.isSendByMe ? 'bg-blue-600'  : 'bg-violet-800'"
         >
-          {{ message.message.content }}
+          <div class="p-2 text-white">{{ message.message.content }}</div>
         </div>
       </div>
     </ion-item>

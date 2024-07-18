@@ -70,6 +70,8 @@ export class ChatPage implements OnInit {
     });
 
     await this.obtainMessages();
+    console.log(`Los mensajes son`);
+    console.log(this.messages);
     this.obtainUserInfo();
 
     this.chatService.socket.on('privateMessage', (message: any) => {
@@ -111,16 +113,18 @@ export class ChatPage implements OnInit {
         },
       };
 
-      this.chatService.sendMessage(this.receiverId, this.newMessage);
-
-      this.messages.push(message);
-      this.newMessage = '';
-
       this.addToBDD({
         idReceiver: this.receiverId,
         typeMessage: 'text',
         messageString: message.message.content,
       });
+
+      this.chatService.sendMessage(this.receiverId, this.newMessage);
+
+      this.messages.push(message);
+      this.newMessage = '';
+
+      
     }
     return;
   }
@@ -138,7 +142,7 @@ export class ChatPage implements OnInit {
         type: 'danger',
       });
       return;
-    }finally{
+    } finally {
       this.loading.hideLoading();
     }
   }

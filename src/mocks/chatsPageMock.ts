@@ -5,9 +5,9 @@ export const ChatsPageMock: Array<ChatInterface> = [
     id: '66974c17a62554245a1b273f',
     lastMessageContent: {
       idUserSender: '66880fbf303a3d97891f2f4d',
-      content: {
+      message: {
         type: 'text',
-        message: 'Este es otro mensaje',
+        content: 'Este es otro mensaje',
       },
       date: '2024-07-17T04:54:03.877Z',
       read: false,
@@ -45,7 +45,7 @@ interface UserLastMessage {
 
 interface LastMessageContent {
   idUserSender: string;
-  content: Content;
+  message: Content;
   date: string;
   read: boolean;
   id: string;
@@ -53,5 +53,5 @@ interface LastMessageContent {
 
 interface Content {
   type: string;
-  message: string;
+  content: string;
 }
