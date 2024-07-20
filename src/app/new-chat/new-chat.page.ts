@@ -56,9 +56,9 @@ export class NewChatPage implements OnInit {
     }, 500);
   }
 
-  clickContact(contact: ContactInterface) {
+  async clickContact(contact: ContactInterface) {
     //Verificar si ya el chat existe, si existe redirigir,
-    const isChat = this.fetchesService.verifyChatExist(contact.id);
+    const isChat = await this.fetchesService.verifyChatExist(contact.id);
 
     console.log(isChat);
 
