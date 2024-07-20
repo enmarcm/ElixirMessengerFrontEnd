@@ -76,8 +76,6 @@ export class ChatPage implements OnInit {
     });
 
     await this.obtainMessages();
-    console.log(`Los mensajes son`);
-    console.log(this.messages);
     this.obtainUserInfo();
 
     this.chatService.socket.on('privateMessage', (message: any) => {
@@ -197,6 +195,7 @@ export class ChatPage implements OnInit {
       this.content.scrollToBottom(300);
     }, 100);
   }
+
 }
 
 type typeMessage = 'text' | 'image' | 'audio';

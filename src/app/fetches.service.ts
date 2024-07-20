@@ -123,6 +123,47 @@ export class FetchesService {
         )
     );
   }
+
+  createChat(idUserReceiver: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .post(
+          URL_REQUEST.CREATE_CHAT,
+          { idUserReceiver },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
+
+  verifyChatExist(idUserReceiver: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.VERIFY_CHAT}/${idUserReceiver}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+    
+  }
 }
 
 type typeMessage = 'text' | 'image' | 'audio';

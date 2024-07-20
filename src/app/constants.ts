@@ -6,4 +6,6 @@ export enum URL_REQUEST {
   ADD_MESSAGE = `${BASE_URL}/messages/addMessage`,
   GET_MESSAGES_CHAT = `${BASE_URL}/messages/getMessages`,
   GET_USER_INFO = `${BASE_URL}/profile/info`,
+  CREATE_CHAT = `${BASE_URL}/messages/addChat`,
+  VERIFY_CHAT = `${BASE_URL}/messages/verifyChatUser`,
 }

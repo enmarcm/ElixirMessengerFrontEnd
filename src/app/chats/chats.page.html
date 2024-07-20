@@ -44,25 +44,32 @@
   </ion-fab-button>
 
   <ion-fab-list side="top">
-    <ion-fab-button>
-      <ion-icon name="chatbubble-ellipses-outline" color="light"></ion-icon>
+    <ion-fab-button (click)="goToNewChat()">
+      <ion-icon name="chatbubble-ellipses-outline" color="dark"></ion-icon>
     </ion-fab-button>
     <ion-fab-button>
-      <ion-icon name="person-add-outline" color="light" id="open-modal" ></ion-icon>
+      <ion-icon
+        name="person-add-outline"
+        color="dark"
+        id="open-modal"
+      ></ion-icon>
     </ion-fab-button>
   </ion-fab-list>
 </ion-fab>
 
 <ion-modal
-#modal
-trigger="open-modal"
-[canDismiss]="canDismiss"
-[presentingElement]="presentingElement"
-(willPresent)="onWillPresent()"
+  #modal
+  trigger="open-modal"
+  [canDismiss]="canDismiss"
+  [presentingElement]="presentingElement"
+  (willPresent)="onWillPresent()"
 >
-<ng-template>
-  <modal-contact [modal]="modal" (dismissChange)="onDismissChange($event)"></modal-contact>
-</ng-template>
+  <ng-template>
+    <modal-contact
+      [modal]="modal"
+      (dismissChange)="onDismissChange($event)"
+    ></modal-contact>
+  </ng-template>
 </ion-modal>
 
 <ion-content [fullscreen]="true">

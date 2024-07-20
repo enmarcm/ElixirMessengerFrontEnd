@@ -91,10 +91,10 @@ export class ChatsPage implements OnInit {
     }
 
     const actionSheet = await this.actionSheetCtr.create({
-      header: 'Are you sure?',
+      header: '¿Seguro que deseas salir?',
       buttons: [
         {
-          text: 'Yes',
+          text: 'Si',
           role: 'confirm',
         },
         {
@@ -110,4 +110,9 @@ export class ChatsPage implements OnInit {
 
     return role === 'confirm';
   };
+
+  goToNewChat(){
+    this.router.navigate(['/new-chat']);
+  }
+  
 }

@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Nuevo chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="px-6 py-4 flex flex-col">
+    <ion-list>
+      <ion-item>
+        <ion-input
+          fill="outline"
+          label="Username o correo"
+          color="success"
+          labelPlacement="floating"
+        ></ion-input>
+      </ion-item>
+
+      @for(contact of contacts; track contact.id){
+      <ion-item (click)="clickContact(contact)">
+        <ion-avatar slot="start">
+          <ion-img [src]="contact.image" />
+        </ion-avatar>
+        <ion-label>{{ contact.name }}</ion-label>
+      </ion-item>
+
+      }
+    </ion-list>
+    <ion-infinite-scroll (ionInfinite)="onIonIfinite($event)">
+      <ion-infinite-scroll-content
+        loadingText="Cargando..."
+        loadingSpinner="bubbles"
+      ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+</ion-content>

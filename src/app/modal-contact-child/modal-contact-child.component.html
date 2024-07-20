@@ -1,22 +1,44 @@
 <div class="ion-page">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Modal</ion-title>
+      <ion-title>Nuevo contacto</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="modal.dismiss()">Close</ion-button>
+        <ion-button (click)="modal.dismiss()"
+          ><ion-icon name="close-circle-outline"></ion-icon
+        ></ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
+
   <ion-content>
-    <ion-list>
-      <ion-item>
-        <ion-checkbox (ionChange)="checkboxChanged($event)">
-          Override Dismiss<br />
-          <ion-note class="ion-text-wrap"
-            >Toggle the checkbox to allow immediately dismissing the modal without a prompt.</ion-note
-          >
-        </ion-checkbox>
-      </ion-item>
-    </ion-list>
+    <div class="h-full w-full flex flex-col px-6 py-4 items-center gap-4">
+      <ion-input
+        [(ngModel)]="inputData.value"
+        label="Usuario o correo"
+        labelPlacement="floating"
+        (ngModelChange)="searchUser($event)"
+        fill="outline"
+        color="secondary"
+      ></ion-input>
+
+      <ion-input
+        label="Nombre de contacto"
+        labelPlacement="floating"
+        [(ngModel)]="inputData.contactName"
+        fill="outline"
+        color="secondary"
+      ></ion-input>
+
+      <ion-card class="flex">
+        <ion-img [src]="urlImage" class="w-[20%]" />
+        <ion-card-header>
+          <ion-card-title> {{ userName }}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+
+      <ion-button shape="round"  color="primary"
+        >Agregar</ion-button
+      >
+    </div>
   </ion-content>
 </div>
