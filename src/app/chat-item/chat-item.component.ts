@@ -35,11 +35,30 @@ import {
 export class ChatItemComponent implements OnInit {
   @Input() chat = DefaultChatItem as any;
 
+  public date = new Date(this.chat.lastMessageContent.date);
+
+  getDate() {
+    const optionsDate = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+    const date = this.date.toLocaleDateString('en-US', optionsDate as any);
+    const time = this.date.toLocaleTimeString('en-US', optionsTime as any);
+
+    return { date, time };
+  }
+
+  public getLastMessage() {
+    const { type, content } = this.chat.lastMessageContent.message;
+    return type === 'text'
+      ? content.length > 20
+        ? `${content.substring(0, 20)}...`
+        : content
+      : '';
+  }
+
   constructor() {}
   ngOnInit() {
-    
-    console.log('Este es el mensaje inicial')
-  console.log(this.chat.lastMessageContent);
+    console.log('Este es el mensaje inicial');
   }
 }
 
@@ -49,9 +68,9 @@ const DefaultChatItem: ChatItem = {
   id: '6696a0dcba1e95a977c83f1b',
   lastMessageContent: {
     idUserSender: '66880fbf303a3d97891f2f4d',
-    content: {
+    message: {
       type: 'text',
-      message: 'Como estas amigo',
+      content: 'Como estas amigo',
     },
     date: '2024-07-16T21:03:28.308Z',
     read: false,
@@ -88,7 +107,7 @@ interface UserLastMessage {
 
 interface LastMessageContent {
   idUserSender: string;
-  content: Content;
+  message: Content;
   date: string;
   read: boolean;
   id: string;
@@ -96,5 +115,5 @@ interface LastMessageContent {
 
 interface Content {
   type: string;
-  message: string;
+  content: string;
 }

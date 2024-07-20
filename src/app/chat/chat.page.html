@@ -1,10 +1,11 @@
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/chats"></ion-back-button>
     </ion-buttons>
 
-    <div class="flex">
+    <div class="flex py-2">
       <div>
         <ion-thumbnail>
           <img [src]="userReceiverInfo.image" class="h-12 w-12 rounded-full" />
@@ -12,7 +13,7 @@
       </div>
 
       <div class="flex-grow flex">
-        <ion-title class="text-white text-lg"
+        <ion-title class="text-dark text-lg"
           >{{userReceiverInfo.userName}}</ion-title
         >
       </div>
@@ -20,10 +21,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="bg-gray-200 p-4">
+<ion-content class="bg-gray-200 p-4" [scrollEvents]="true">
   @if(messages.length > 0){
   <ion-list class="mb-16">
-    @for(message of messages; track (message.id + chatId)){
+    @for(message of messages; track (message.id + message.isSendByMe)){
 
     <ion-item>
       <div
@@ -31,7 +32,7 @@
         [class]="message.isSendByMe ? 'justify-end' : 'justify-start'"
       >
         <div
-          class="max-w-3/4 rounded-xl flex"
+          class="max-w-[75%] rounded-xl flex"
           [class]="message.isSendByMe ? 'bg-blue-600'  : 'bg-violet-800'"
         >
           <div class="p-2 text-white">{{ message.message.content }}</div>
@@ -51,8 +52,8 @@
       [(ngModel)]="newMessage"
     ></ion-input>
     <ion-button
-      class="ml-2 bg-blue-600 text-white rounded-full"
-      (click)="sendMessage()"
+      class="ml-2 bg-blue-600 text-white rounded-full p-2"
+      (click)="sendMessage()" shape="round"
     >
       <ion-icon name="send"></ion-icon>
       <!-- Agrega el ícono de enviar -->

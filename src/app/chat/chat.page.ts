@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -22,6 +22,8 @@ import { jwtDecode } from 'jwt-decode';
 import { LoadingService } from '../loading.service';
 import { ToastService } from '../toast.service';
 import { FetchesService } from '../fetches.service';
+import { addIcons } from 'ionicons';
+import { send } from 'ionicons/icons';
 
 @Component({
   selector: 'app-chat',
@@ -53,6 +55,9 @@ export class ChatPage implements OnInit {
   public chatId = '';
   public userReceiverInfo = {} as UserInfo;
 
+  @ViewChild(IonContent, { static: false }) content: IonContent = this
+    .messages as any;
+
   constructor(
     private chatService: ChatService,
     private route: ActivatedRoute,
@@ -61,6 +66,7 @@ export class ChatPage implements OnInit {
     private fetches: FetchesService
   ) {
     this.newMessage = '';
+    addIcons({ send });
   }
 
   async ngOnInit() {
@@ -82,6 +88,7 @@ export class ChatPage implements OnInit {
 
       console.log('newMessage', newMessage);
       this.messages.push(newMessage);
+      this.scrollToBottom();
     });
   }
 
@@ -123,8 +130,7 @@ export class ChatPage implements OnInit {
 
       this.messages.push(message);
       this.newMessage = '';
-
-      
+      this.scrollToBottom();
     }
     return;
   }
@@ -177,12 +183,19 @@ export class ChatPage implements OnInit {
       })) as Array<any>;
 
       this.messages = messages;
+      this.scrollToBottom();
     } catch (error) {
       this.toast.showToast({
         message: 'Error al obtener mensajes',
         type: 'danger',
       });
     }
+  }
+
+  private scrollToBottom() {
+    setTimeout(() => {
+      this.content.scrollToBottom(300);
+    }, 100);
   }
 }
 
