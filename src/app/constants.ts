@@ -8,4 +8,8 @@ export enum URL_REQUEST {
   GET_USER_INFO = `${BASE_URL}/profile/info`,
   CREATE_CHAT = `${BASE_URL}/messages/addChat`,
   VERIFY_CHAT = `${BASE_URL}/messages/verifyChatUser`,
+  GET_USER_CHATS = `${BASE_URL}/messages/getUserChats`,
+  GET_CONTACTS = `${BASE_URL}/contacts/getAllContacts`,
+  USER_EXIST = `${BASE_URL}/profile/info/userExist`,
+  ADD_CONTACT = `${BASE_URL}/contacts/addContact`,
 }

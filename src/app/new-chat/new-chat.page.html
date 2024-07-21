@@ -1,13 +1,16 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/chats"></ion-back-button>
+    </ion-buttons>
     <ion-title>Nuevo chat</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="px-6 py-4 flex flex-col">
+  <div class="px-2 py-4 flex flex-col">
     <ion-list>
-      <ion-item>
+      <ion-item class="mb-4">
         <ion-input
           fill="outline"
           label="Username o correo"
@@ -19,14 +22,14 @@
       @for(contact of contacts; track contact.id){
       <ion-item (click)="clickContact(contact)">
         <ion-avatar slot="start">
-          <ion-img [src]="contact.image" />
+          <ion-img [src]="contact.userContactData.image" />
         </ion-avatar>
         <ion-label>{{ contact.name }}</ion-label>
       </ion-item>
 
       }
     </ion-list>
-    <ion-infinite-scroll (ionInfinite)="onIonIfinite($event)">
+    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
       <ion-infinite-scroll-content
         loadingText="Cargando..."
         loadingSpinner="bubbles"

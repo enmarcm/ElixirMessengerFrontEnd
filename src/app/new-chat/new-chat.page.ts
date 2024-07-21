@@ -13,18 +13,18 @@ import {
   IonList,
   IonLabel,
   IonImg,
-  IonInput,
-} from '@ionic/angular/standalone';
+  IonInput, IonButtons, IonBackButton } from '@ionic/angular/standalone';
 import { contactsToChatMock } from 'src/mocks/contactsToChatMock';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { FetchesService } from '../fetches.service';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-new-chat',
   templateUrl: './new-chat.page.html',
   styleUrls: ['./new-chat.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonBackButton, IonButtons, 
     IonInput,
     IonImg,
     IonLabel,
@@ -43,17 +43,39 @@ import { FetchesService } from '../fetches.service';
 })
 export class NewChatPage implements OnInit {
   public contacts: ContactInterface[] = contactsToChatMock;
+  private pageContacts = 1;
 
-  constructor(private fetchesService: FetchesService) {}
+  constructor(
+    private fetchesService: FetchesService,
+    private loadingService: LoadingService
+  ) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.loadingService.showLoading('Obteniendo contactos');
+    try {
+      this.contacts =
+        (await this.fetchesService.obtainContacts()) as ContactInterface[];
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loadingService.hideLoading();
+    }
+  }
 
-  onIonIfinite(event: any) {
-    const newContacts = contactsToChatMock.slice(0, 10);
+  async onIonInfinite(event: any) {
+    this.pageContacts++;
+    const newContacts = (await this.fetchesService.obtainContacts(
+      this.pageContacts
+    )) as ContactInterface[];
+
+    if (newContacts.length === 0 || !newContacts) {
+      (event as InfiniteScrollCustomEvent).target.disabled = true;
+      return;
+    }
+
     this.contacts.push(...newContacts);
-    setTimeout(() => {
-      (event as InfiniteScrollCustomEvent).target.complete();
-    }, 500);
+
+    (event as InfiniteScrollCustomEvent).target.complete();
   }
 
   async clickContact(contact: ContactInterface) {
@@ -68,7 +90,13 @@ export class NewChatPage implements OnInit {
 
 interface ContactInterface {
   id: string;
+  idUserContact: string;
+  idUserOwner: string;
   name: string;
-  image: string;
-  email: string;
+  userContactData: {
+    userName: string;
+    email: string;
+    image: string;
+    id: string;
+  };
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +11,13 @@ export class ChatService {
   public readonly serverUrl = 'http://localhost:9090';
   public outgoingMessages = new Subject<any>();
 
-  constructor() {
+  constructor(private loadingService: LoadingService) {
     this.connect();
   }
 
   public connect() {
+    
+    
     this.socket = io(this.serverUrl, {
       extraHeaders: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -28,15 +31,15 @@ export class ChatService {
     });
 
     this.socket.on('registered', (message: string) => {
-      console.log(message); // Confirmación de registro
+      console.log(message);
     });
 
     this.socket.on('error', (errorMessage: string) => {
-      console.error('Socket error:', errorMessage); // Manejo de errores
+      console.error('Socket error:', errorMessage);
     });
   }
 
-  sendMessage(receiverId: string, message: string, type = "text") {
+  sendMessage(receiverId: string, message: string, type = 'text') {
     console.log(`Enviando mensaje a ${receiverId}: ${message}`);
     const senderId = localStorage.getItem('userId');
 
@@ -45,20 +48,18 @@ export class ChatService {
       receiver: receiverId,
       message: {
         type,
-        content: message
-      }
+        content: message,
+      },
     };
 
     // Notificar a los observadores sobre el mensaje saliente
     this.outgoingMessages.next(messageObj);
 
-
     this.socket.emit('privateMessage', messageObj);
-
   }
 
   listenForIncomingMessages(): Observable<any> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       this.socket.on('privateMessage', (message: any) => {
         observer.next(message);
       });

@@ -16,9 +16,10 @@
         [(ngModel)]="inputData.value"
         label="Usuario o correo"
         labelPlacement="floating"
-        (ngModelChange)="searchUser($event)"
         fill="outline"
         color="secondary"
+        debounce="1500"
+        (ionInput)="searchUser($event)"
       ></ion-input>
 
       <ion-input
@@ -29,16 +30,18 @@
         color="secondary"
       ></ion-input>
 
-      <ion-card class="flex">
+      @if(isValid){
+      <ion-card class="flex p-4">
         <ion-img [src]="urlImage" class="w-[20%]" />
         <ion-card-header>
           <ion-card-title> {{ userName }}</ion-card-title>
         </ion-card-header>
       </ion-card>
 
-      <ion-button shape="round"  color="primary"
+      <ion-button shape="round" color="primary" (click)="addContact()"
         >Agregar</ion-button
       >
+      }
     </div>
   </ion-content>
 </div>

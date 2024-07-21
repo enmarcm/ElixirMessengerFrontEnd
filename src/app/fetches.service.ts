@@ -162,7 +162,51 @@ export class FetchesService {
           })
         )
     );
-    
+  }
+
+  obtainContacts(page = 1) {
+    const token = localStorage.getItem('token');
+
+    // this.loadingService.showLoading();
+
+    return firstValueFrom(
+      this.httpClient.get(`${URL_REQUEST.GET_CONTACTS}?page=${page}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    );
+  }
+
+  verifyUserExist(userNameOrEmail: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.USER_EXIST}/${userNameOrEmail}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
+
+  addContact({userOrEmail, nameContact}: {userOrEmail: string, nameContact: string}){
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient.post(URL_REQUEST.ADD_CONTACT, {userOrEmail, nameContact}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    );
+  
   }
 }
 

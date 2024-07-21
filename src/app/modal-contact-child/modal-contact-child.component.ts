@@ -19,16 +19,23 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent, IonImg } from '@ionic/angular/standalone';
+  IonCardContent,
+  IonImg,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { closeCircleOutline } from 'ionicons/icons';
+import { FetchesService } from '../fetches.service';
+import { ToastService } from '../toast.service';
+import { LoadingService } from '../loading.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'modal-contact',
   templateUrl: './modal-contact-child.component.html',
   styleUrls: ['./modal-contact-child.component.scss'],
   standalone: true,
-  imports: [IonImg, 
+  imports: [
+    IonImg,
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
@@ -53,6 +60,7 @@ import { closeCircleOutline } from 'ionicons/icons';
 export class ModalContactChildComponent implements OnInit {
   @Input() modal!: IonModal;
   @Output() dismissChange = new EventEmitter<boolean>();
+  public isValid = false;
 
   public userName = '';
   public urlImage =
@@ -70,12 +78,69 @@ export class ModalContactChildComponent implements OnInit {
     this.dismissChange.emit(checked);
   }
 
-  constructor() {
+  constructor(
+    private fetcheService: FetchesService,
+    private toastService: ToastService,
+    private loading: LoadingService,
+    private router: Router
+  ) {
     addIcons({ closeCircleOutline });
   }
+
   ngOnInit() {}
 
-  searchUser(event: any) {
-    console.log(event);
+  async searchUser(event: any) {
+    try {
+      const name = event.target.value;
+
+      this.loading.showLoading();
+      const result = (await this.fetcheService.verifyUserExist(name)) as any;
+      this.isValid = result ? true : false;
+
+      if (!result) {
+        this.toastService.showToast({
+          message: 'Usuario no encontrado',
+          duration: 2000,
+        });
+        return;
+      }
+
+      this.userName = result.userName;
+      this.urlImage = result.image;
+    } catch (error) {
+      this.toastService.showToast({
+        message: 'Error al buscar usuario',
+        type: 'danger',
+      });
+    } finally {
+      this.loading.hideLoading();
+    }
+  }
+
+  async addContact() {
+    try {
+      if (!this.userName || !this.inputData.contactName) return;
+
+      this.loading.showLoading();
+      await this.fetcheService.addContact({
+        userOrEmail: this.userName,
+        nameContact: this.inputData.contactName,
+      });
+
+      this.router.navigate(['/contacts']);
+    } catch (error) {
+      this.toastService.showToast({
+        message: 'Error al agregar contacto',
+        type: 'danger',
+      });
+    } finally {
+      this.loading.hideLoading();
+      this.dismissChange.emit(true);
+      this.toastService.showToast({
+        message: 'Contacto agregado',
+        duration: 2000,
+        type: 'success',
+      });
+    }
   }
 }

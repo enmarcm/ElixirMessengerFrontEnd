@@ -30,10 +30,11 @@ export class ChatsWrapperComponent implements OnInit {
 
   async ngOnInit() {
     this.chats = await this.obtainChats();
-    console.log('Estos son los chats iniciales, revisar')
+    console.log('Estos son los chats iniciales, revisar');
     console.log(this.chats);
 
     this.chatService.connect();
+
     this.messageSubscription = this.chatService
       .listenForIncomingMessages()
       .subscribe((message: any) => {
@@ -73,7 +74,6 @@ export class ChatsWrapperComponent implements OnInit {
         };
 
         // console.log(this.chats[chatIndex]);
-  
       } else {
         this.obtainChats(1, false);
       }
