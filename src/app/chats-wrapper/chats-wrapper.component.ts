@@ -114,10 +114,10 @@ export class ChatsWrapperComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.chatService.disconnect();
-    if (this.messageSubscription) {
-      this.messageSubscription.unsubscribe();
-    }
+    // this.chatService.disconnect();
+    // if (this.messageSubscription) {
+    //   this.messageSubscription.unsubscribe();
+    // }
   }
 }
 

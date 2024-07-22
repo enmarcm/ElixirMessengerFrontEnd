@@ -89,8 +89,7 @@ export class FetchesService {
   }) {
     const token = localStorage.getItem('token');
 
-    this.loadingService.showLoading();
-
+    this.loadingService.showLoading('Cargando mensajes');
     return firstValueFrom(
       this.httpClient
         .get(`${URL_REQUEST.GET_MESSAGES_CHAT}/${idChat}/${page}`, {
@@ -124,14 +123,14 @@ export class FetchesService {
     );
   }
 
-  createChat(idUserReceiver: string) {
+  createChat(idUserReceiver: string, twoChats = true) {
     const token = localStorage.getItem('token');
 
     return firstValueFrom(
       this.httpClient
         .post(
           URL_REQUEST.CREATE_CHAT,
-          { idUserReceiver },
+          { idUserReceiver, twoChats },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -148,6 +147,7 @@ export class FetchesService {
 
   verifyChatExist(idUserReceiver: string) {
     const token = localStorage.getItem('token');
+    // this.loadingService.showLoading('Cargando chat');
 
     return firstValueFrom(
       this.httpClient
@@ -158,7 +158,7 @@ export class FetchesService {
         })
         .pipe(
           finalize(() => {
-            this.loadingService.hideLoading();
+            // this.loadingService.hideLoading();
           })
         )
     );
@@ -167,14 +167,20 @@ export class FetchesService {
   obtainContacts(page = 1) {
     const token = localStorage.getItem('token');
 
-    // this.loadingService.showLoading();
+    this.loadingService.showLoading('Obteniendo contactos');
 
     return firstValueFrom(
-      this.httpClient.get(`${URL_REQUEST.GET_CONTACTS}?page=${page}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      this.httpClient
+        .get(`${URL_REQUEST.GET_CONTACTS}?page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
     );
   }
 
@@ -190,23 +196,32 @@ export class FetchesService {
         })
         .pipe(
           finalize(() => {
-            this.loadingService.hideLoading();
+            // this.loadingService.hideLoading();
           })
         )
     );
   }
 
-  addContact({userOrEmail, nameContact}: {userOrEmail: string, nameContact: string}){
+  addContact({
+    userOrEmail,
+    nameContact,
+  }: {
+    userOrEmail: string;
+    nameContact: string;
+  }) {
     const token = localStorage.getItem('token');
 
     return firstValueFrom(
-      this.httpClient.post(URL_REQUEST.ADD_CONTACT, {userOrEmail, nameContact}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      this.httpClient.post(
+        URL_REQUEST.ADD_CONTACT,
+        { userOrEmail, nameContact },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
     );
-  
   }
 }
 

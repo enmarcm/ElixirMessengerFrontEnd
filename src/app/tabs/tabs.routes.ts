@@ -12,9 +12,8 @@ export const routes: Routes = [
           import('../chats/chats.page').then((m) => m.ChatsPage),
       },
       {
-        path: 'tab2',
-        loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+        path: 'statuses',
+        loadComponent: () => import('../statuses/statuses.page').then((m) => m.StatusesPage),
       },
       {
         path: 'tab3',

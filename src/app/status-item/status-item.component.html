@@ -1,0 +1,14 @@
+<div class="relative flex flex-col items-center">
+  <div class="relative w-20 h-20 flex justify-center items-center">
+    <div *ngFor="let _ of status.status; let i = index" class="rayita" [ngStyle]="{'transform': 'rotate(' + (i * (360 / status.status.length)) + 'deg) translateX(-50%)'}"></div>
+    <!-- Imagen del Contacto -->
+    <div class="rounded-full w-16 h-16 overflow-hidden flex justify-center items-center z-10">
+      <ion-img [src]="status.contact.image" class="object-cover"/>
+    </div>
+  </div>
+  <!-- Información del Contacto -->
+  <ion-card-header class="mt-4">
+    <ion-card-title>{{status.contact.name}}</ion-card-title>
+    <ion-card-subtitle>{{calculateTimeAgo(status.status[-1].date)}}</ion-card-subtitle>
+  </ion-card-header>
+</div>

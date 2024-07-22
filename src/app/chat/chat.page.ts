@@ -17,7 +17,7 @@ import {
   IonThumbnail,
 } from '@ionic/angular/standalone';
 import { ChatService } from '../socket.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { LoadingService } from '../loading.service';
 import { ToastService } from '../toast.service';
@@ -53,7 +53,10 @@ export class ChatPage implements OnInit {
   public newMessage: string = 'value';
   public receiverId = '';
   public chatId = '';
-  public userReceiverInfo = {} as UserInfo;
+  public userReceiverInfo = {
+    image:
+      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
+  } as UserInfo;
 
   @ViewChild(IonContent, { static: false }) content: IonContent = this
     .messages as any;
@@ -63,7 +66,8 @@ export class ChatPage implements OnInit {
     private route: ActivatedRoute,
     private loading: LoadingService,
     private toast: ToastService,
-    private fetches: FetchesService
+    private fetches: FetchesService,
+    private router: Router
   ) {
     this.newMessage = '';
     addIcons({ send });
@@ -196,6 +200,9 @@ export class ChatPage implements OnInit {
     }, 100);
   }
 
+  goToChats() {
+    this.router.navigate(['/chats']);
+  }
 }
 
 type typeMessage = 'text' | 'image' | 'audio';

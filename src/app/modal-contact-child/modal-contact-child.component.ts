@@ -122,12 +122,29 @@ export class ModalContactChildComponent implements OnInit {
       if (!this.userName || !this.inputData.contactName) return;
 
       this.loading.showLoading();
-      await this.fetcheService.addContact({
+      const resultAdd = (await this.fetcheService.addContact({
         userOrEmail: this.userName,
         nameContact: this.inputData.contactName,
+      })) as any;
+
+      console.log(resultAdd);
+
+      if (!resultAdd || resultAdd.error) {
+        this.toastService.showToast({
+          message: resultAdd.error.message || 'Error al agregar contacto',
+          type: 'danger',
+        });
+
+        return;
+      }
+
+      this.toastService.showToast({
+        message: 'Contacto agregado',
+        duration: 2000,
+        type: 'success',
       });
 
-      this.router.navigate(['/contacts']);
+      this.router.navigate(['/chats']);
     } catch (error) {
       this.toastService.showToast({
         message: 'Error al agregar contacto',
@@ -136,11 +153,6 @@ export class ModalContactChildComponent implements OnInit {
     } finally {
       this.loading.hideLoading();
       this.dismissChange.emit(true);
-      this.toastService.showToast({
-        message: 'Contacto agregado',
-        duration: 2000,
-        type: 'success',
-      });
     }
   }
 }

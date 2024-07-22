@@ -29,6 +29,12 @@ export const routes: Routes = [
   },
   {
     path: 'new-chat',
-    loadComponent: () => import('./new-chat/new-chat.page').then( m => m.NewChatPage)
+    loadComponent: () =>
+      import('./new-chat/new-chat.page').then((m) => m.NewChatPage),
+  },
+  {
+    path: 'statuses',
+    redirectTo: '/tabs/statuses',
+    pathMatch: 'full',
   },
 ];
