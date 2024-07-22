@@ -29,9 +29,7 @@ export class ChatsWrapperComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.chats = await this.obtainChats();
-    console.log('Estos son los chats iniciales, revisar');
-    console.log(this.chats);
+    
 
     this.chatService.connect();
 
@@ -78,6 +76,10 @@ export class ChatsWrapperComponent implements OnInit {
         this.obtainChats(1, false);
       }
     });
+
+    this.chats = await this.obtainChats();
+    console.log('Estos son los chats iniciales, revisar');
+    console.log(this.chats);
   }
 
   async obtainChats(page = 1, loading = true) {

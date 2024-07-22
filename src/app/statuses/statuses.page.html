@@ -4,43 +4,37 @@
       <ion-col size="9" class="flex flex-col items-start justify-center">
         <ion-title>
           <span
-            class="text-4xl font-poppins text-dark font-semibold text-start"
+            class="text-3xl font-poppins text-dark font-semibold text-start"
           >
             Estados
           </span>
         </ion-title>
       </ion-col>
-
-      <!-- TODO: VER SI PUEDO AGREGAR OPCIONES -->
-      <!-- <ion-col size="2" class="flex items-center justify-center">
-        <ion-button id="popover-button" fill="clear">
-          <ion-icon
-            name="ellipsis-vertical-outline"
-            class="text-2xl text-dark"
-            color="light"
-          ></ion-icon>
-        </ion-button>
-
-        <ion-popover
-          trigger="popover-button"
-          dismissOnSelect="true"
-          class="z-50"
-        >
-          <ng-template class="z-50">
-            <ion-list>
-              <ion-item button (click)="openProfille()">Profile</ion-item>
-              <ion-item button (click)="logout()">Cerrar sesión</ion-item>
-            </ion-list>
-          </ng-template>
-        </ion-popover>
-
-
-      </ion-col> -->
     </ion-row>
   </ion-grid>
 </ion-header>
 
-
 <ion-content [fullscreen]="true">
-  
+  @if(contactStatus.length === 0){
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="flex flex-col items-center justify-center">
+        <ion-text class="text-center">
+          <h1 class="text-2xl font-poppins text-dark font-semibold">
+            No hay estados
+          </h1>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  }@else { @for(contact of contactStatus; track contact.contact.id){
+  <app-status-item [status]="contact"></app-status-item>
+  } }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="secondary" (click)="goToNewStatus()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

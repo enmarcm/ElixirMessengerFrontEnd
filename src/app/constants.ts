@@ -12,4 +12,7 @@ export enum URL_REQUEST {
   GET_CONTACTS = `${BASE_URL}/contacts/getAllContacts`,
   USER_EXIST = `${BASE_URL}/profile/info/userExist`,
   ADD_CONTACT = `${BASE_URL}/contacts/addContact`,
+  GET_CONTACTS_STATUS = `${BASE_URL}/status/getAllStatusContacts`,
+  ADD_STATUS = `${BASE_URL}/status/createStatus`,
+  DELETE_STATUS = `${BASE_URL}/status/deleteStatus`,
 }

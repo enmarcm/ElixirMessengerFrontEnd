@@ -75,12 +75,10 @@ export class ChatsPage implements OnInit {
   }
 
   onDismissChange(canDismiss: boolean) {
-    // Allows the modal to be dismissed based on the state of the checkbox
     this.canDismissOverride = canDismiss;
   }
 
   onWillPresent() {
-    // Resets the override when the modal is presented
     this.canDismissOverride = false;
   }
 

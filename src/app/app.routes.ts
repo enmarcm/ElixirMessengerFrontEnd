@@ -37,4 +37,8 @@ export const routes: Routes = [
     redirectTo: '/tabs/statuses',
     pathMatch: 'full',
   },
+  {
+    path: 'new-status',
+    loadComponent: () => import('./new-status/new-status.page').then( m => m.NewStatusPage)
+  },
 ];

@@ -223,6 +223,67 @@ export class FetchesService {
       )
     );
   }
+
+  obtainAllContactsStatus() {
+    const token = localStorage.getItem('token');
+    this.loadingService.showLoading('Obteniendo estados');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(URL_REQUEST.GET_CONTACTS_STATUS, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
+
+  addStatus({ description, image }: { description: String; image: String }) {
+    const token = localStorage.getItem('token');
+
+    this.loadingService.showLoading('Agregando estado');
+    return firstValueFrom(
+      this.httpClient
+        .post(
+          URL_REQUEST.ADD_STATUS,
+          { description, image },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
+
+  deleteStatus(idStatus: string) {
+    const token = localStorage.getItem('token');
+
+    this.loadingService.showLoading('Eliminando estado');
+    return firstValueFrom(
+      this.httpClient
+        .delete(`${URL_REQUEST.DELETE_STATUS}/${idStatus}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
+            this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
 }
 
 type typeMessage = 'text' | 'image' | 'audio';
