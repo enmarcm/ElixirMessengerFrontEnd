@@ -1,5 +1,5 @@
 // export const BASE_URL = 'http://localhost:9090';
-export const BASE_URL = "https://elixirbackend-production.up.railway.app"
+export const BASE_URL = 'https://elixirbackend-production.up.railway.app';
 
 export enum URL_REQUEST {
   LOGIN = `${BASE_URL}/auth/login`,
@@ -18,4 +18,5 @@ export enum URL_REQUEST {
   DELETE_STATUS = `${BASE_URL}/status/deleteStatus`,
   GET_MY_STATUS = `${BASE_URL}/status/getMyStatus`,
   GET_STATUS_USER = `${BASE_URL}/status/getStatusUser`,
+  REGISTER = `${BASE_URL}/auth/register`,
 }

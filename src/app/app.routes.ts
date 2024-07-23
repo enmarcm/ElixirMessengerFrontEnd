@@ -39,14 +39,22 @@ export const routes: Routes = [
   },
   {
     path: 'new-status',
-    loadComponent: () => import('./new-status/new-status.page').then( m => m.NewStatusPage)
+    loadComponent: () =>
+      import('./new-status/new-status.page').then((m) => m.NewStatusPage),
   },
   {
     path: 'view-status/:idUser',
-    loadComponent: () => import('./view-status/view-status.page').then( m => m.ViewStatusPage)
+    loadComponent: () =>
+      import('./view-status/view-status.page').then((m) => m.ViewStatusPage),
   },
   {
     path: 'edit-status',
-    loadComponent: () => import('./edit-status/edit-status.page').then( m => m.EditStatusPage)
+    loadComponent: () =>
+      import('./edit-status/edit-status.page').then((m) => m.EditStatusPage),
+  },
+  {
+    path: 'auth/register',
+    loadComponent: () =>
+      import('./register/register.page').then((m) => m.RegisterPage),
   },
 ];

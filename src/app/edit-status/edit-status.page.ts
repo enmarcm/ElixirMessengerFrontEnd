@@ -32,7 +32,6 @@ import { ToastService } from '../toast.service';
 import { addIcons } from 'ionicons';
 import { closeCircle, trashOutline } from 'ionicons/icons';
 import { AlertController } from '@ionic/angular';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-status',

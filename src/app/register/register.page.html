@@ -1,0 +1,171 @@
+<ion-content [fullscreen]="true" class="min-h-screen relative py-4">
+  <div class="absolute inset-0 z-0 overflow-y-scroll">
+    <svg
+      width="428"
+    height="926"
+      viewBox="0 0 428 926"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-full h-full object-cover"
+    >
+      <rect
+        x="-194.462"
+        y="576.051"
+        width="370"
+        height="370"
+        transform="rotate(27.0888 -194.462 576.051)"
+        stroke="#71F4FF"
+        stroke-width="2"
+      />
+      <rect
+        x="-305"
+        y="635"
+        width="370"
+        height="370"
+        stroke="#71F4FF"
+        stroke-width="2"
+      />
+      <circle cx="271" cy="77" r="246.5" stroke="#C8F9FF" stroke-width="3" />
+      <circle cx="431.5" cy="-38.5" r="317.5" fill="#C8F9FF" />
+    </svg>
+  </div>
+
+  <ion-grid
+    class="h-full overflow-y-scroll flex flex-col gap-2 box-border py-6 px-4 relative z-10"
+  >
+    <ion-row class="h-[20%]">
+      <ion-col
+        size="12"
+        class="flex flex-col gap-4 justify-center items-center h-full"
+      >
+        <ion-img
+          class="object-cover max-w-40 max-h-24"
+          src="../../assets/images/elixir-icon.svg"
+        ></ion-img>
+        <h1 class="text-2xl font-poppins font-semibold">Ingresa aquí</h1>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="h-[60%] flex flex-col items-center justify-start py-4 my-2">
+      <ion-col
+        size="12"
+        class="h-full flex flex-col gap-5 justify-start items-center"
+      >
+        <ion-input
+          label="Usuario"
+          labelPlacement="stacked"
+          fill="outline"
+          placeholder="enmarcm"
+          color="secondary"
+          class="custom-input"
+          (ngModelChange)="verifyData()"
+          ngDefaultControl
+          [(ngModel)]="registerData.userName"
+        ></ion-input>
+
+        <ion-input
+          label="Email"
+          labelPlacement="stacked"
+          fill="outline"
+          placeholder="enmarcm"
+          color="secondary"
+          class="custom-input"
+          (ngModelChange)="verifyData()"
+          ngDefaultControl
+          [(ngModel)]="registerData.email"
+        ></ion-input>
+
+        <ion-input
+          label="Contraseña"
+          fill="outline"
+          placeholder="12345678."
+          color="secondary"
+          labelPlacement="stacked"
+          class="custom-input border-none bg-transparent"
+          type="password"
+          (ngModelChange)="verifyData()"
+          ngDefaultControl
+          [(ngModel)]="registerData.password"
+        >
+          <ion-input-password-toggle
+            slot="end"
+            class="bg-transparent"
+          ></ion-input-password-toggle>
+        </ion-input>
+
+        <ion-input
+          label="Contraseña"
+          fill="outline"
+          placeholder="12345678."
+          color="secondary"
+          labelPlacement="stacked"
+          class="custom-input border-none bg-transparent"
+          type="password"
+          (ngModelChange)="verifyData()"
+          ngDefaultControl
+          [(ngModel)]="registerData.confirmPassword"
+        >
+          <ion-input-password-toggle
+            slot="end"
+            class="bg-transparent"
+          ></ion-input-password-toggle>
+        </ion-input>
+
+        <div>
+          <h4 class="text-gray-500 text-sm">
+            NOTA: La contraseña debe ser un conjunto de 8 a 12 caracteres. Debe
+            incluir al menos un caracter especial.
+          </h4>
+        </div>
+
+        <ion-row class="flex justify-between">
+          <label class="font-extrabold text-xl">Fecha de nacimiento</label>
+
+          <ion-datetime-button
+            datetime="datetime"
+            color="dark"
+          ></ion-datetime-button>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="datetime"
+                presentation="date"
+                (ngModelChange)="verifyData()"
+                ngDefaultControl
+                [(ngModel)]="registerData.dateOfBirth"
+                color="success"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-row>
+
+        <ion-row class="flex flex-col mb-1">
+          <label class="font-extrabold text-xl text-black mb-2"
+            >Imagen de la cuenta</label
+          >
+          <input
+            type="file"
+            class="p-2 rounded-xl border-2 border-blue-500 text-black cursor-pointer hover:border-blue-500"
+            (change)="onFileSelectedImage($event)"
+            accept="image/*"
+            name="fileImage"
+          />
+        </ion-row>
+
+        <ion-button
+          [color]="isValidRegister ? 'primary' : 'medium'"
+          [fill]="isValidRegister ? 'solid' : 'outline'"
+          shape="round"
+          class="p-4 w-full mb-4"
+          (click)="register()"
+          [class]="{
+            'cursor-not-allowed': !isValidRegister,
+          }"
+        >
+          <span class="font-semibold text-lg font-poppins">Registrar</span>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

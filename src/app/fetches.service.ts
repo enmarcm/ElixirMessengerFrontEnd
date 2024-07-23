@@ -307,6 +307,25 @@ export class FetchesService {
         )
     );
   }
+
+  register(register: RegisterData) {
+    this.loadingService.showLoading('Registrando');
+
+    return firstValueFrom(
+      this.httpClient.post(URL_REQUEST.REGISTER, register).pipe(
+        finalize(() => {
+          this.loadingService.hideLoading();
+        })
+      )
+    );
+  }
 }
 
 type typeMessage = 'text' | 'image' | 'audio';
+interface RegisterData {
+  userName: string;
+  email: string;
+  password: string;
+  image: string;
+  dateOfBirth: string;
+}
