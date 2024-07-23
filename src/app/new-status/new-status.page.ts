@@ -51,7 +51,7 @@ export class NewStatusPage implements OnInit {
   public currentImageWeb: any = null;
   public inputDescription: string = '';
   public isReady: boolean = false;
-  public filePhoto: null | string = null;
+  public filePhoto: null | File = null;
 
   ngOnInit() {
     this.addPhotoToGallery();
@@ -65,25 +65,32 @@ export class NewStatusPage implements OnInit {
 
       this.loading.showLoading('Cargando...');
 
-      const photoBlobOrFile =
-        (await this.photoService.addNewToGallery()) as any;
+      const photoBlobOrFile = await this.photoService.addNewToGallery();
 
       this.currentImageWeb = photoBlobOrFile.webviewPath;
-
       this.filePhoto = photoBlobOrFile.file;
 
       if (!this.filePhoto) throw new Error('User cancelled photos app');
 
-      this.upload.uploadFile(this.filePhoto as any).subscribe((url) => {
-        this.currentImage = url;
-        this.isReady = true;
-        this.toast.showToast({
-          message: 'Foto subida con éxito.',
-          type: 'success',
-        });
+      this.upload.uploadFile(this.filePhoto).subscribe({
+        next: (url) => {
+          this.currentImage = url;
+          this.isReady = true;
+          this.toast.showToast({
+            message: 'Foto subida con éxito.',
+            type: 'success',
+          });
+          this.loading.hideLoading();
+        },
+        error: (error) => {
+          console.error('Ocurrió un error al subir la foto:', error);
+          this.toast.showToast({
+            message: 'Ocurrió un error al subir la foto.',
+            type: 'danger',
+          });
+          this.loading.hideLoading();
+        }
       });
-
-      this.loading.hideLoading();
     } catch (error: any) {
       if (error.message === 'User cancelled photos app') {
         console.log('Selección de foto cancelada por el usuario.');
@@ -92,12 +99,9 @@ export class NewStatusPage implements OnInit {
           type: 'warning',
         });
       } else {
-        console.error(
-          'Ocurrió un error al agregar la foto a la galería:',
-          error
-        );
+        console.error('Ocurrió un error al agregar la foto a la galería:', error);
         this.toast.showToast({
-          message: 'Ocurrió un error al agregar la foto a la galería.',
+          message: 'Ocurrió un error al agregar la foto a la galería.' + error,
           type: 'danger',
         });
       }
@@ -138,32 +142,3 @@ export class NewStatusPage implements OnInit {
     this.router.navigate(['/statuses']);
   }
 }
-
-// async addPhotoToGallery() {
-//   try {
-//     this.loading.showLoading('Cargando...');
-//     const photo = await this.photoService.addNewToGallery();
-//     this.currentImage = photo.webviewPath;
-//     console.log(this.currentImage);
-//   } catch (error: any) {
-//     if (error.message === 'User cancelled photos app') {
-//       console.log('Selección de foto cancelada por el usuario.');
-//       this.toast.showToast({
-//         message: 'Selección de foto cancelada por el usuario.',
-//         type: 'warning',
-//       });
-//     } else {
-//       // Manejo de otros errores no esperados
-//       console.error(
-//         'Ocurrió un error al agregar la foto a la galería:',
-//         error
-//       );
-//       this.toast.showToast({
-//         message: 'Ocurrió un error al agregar la foto a la galería.',
-//         type: 'danger',
-//       });
-//     }
-//   } finally {
-//     this.loading.hideLoading();
-//   }
-// }

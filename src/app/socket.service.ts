@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
 import { LoadingService } from './loading.service';
+import { BASE_URL } from './constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   public socket: any;
-  public readonly serverUrl = 'http://localhost:9090';
+  // public readonly serverUrl = 'http://localhost:9090';
+
+  public serverUrl = BASE_URL;
+
   public outgoingMessages = new Subject<any>();
 
   constructor(private loadingService: LoadingService) {
@@ -16,8 +20,6 @@ export class ChatService {
   }
 
   public connect() {
-    
-    
     this.socket = io(this.serverUrl, {
       extraHeaders: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
