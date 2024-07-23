@@ -234,10 +234,7 @@ export class FetchesService {
             Authorization: `Bearer ${token}`,
           },
         })
-        .pipe(
-          finalize(() => {
-          })
-        )
+        .pipe(finalize(() => {}))
     );
   }
 
@@ -293,8 +290,24 @@ export class FetchesService {
             Authorization: `Bearer ${token}`,
           },
         })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  getStatusUser(idUser: string) {
+    const token = localStorage.getItem('token');
+
+    this.loadingService.showLoading('Obteniendo estados');
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.GET_STATUS_USER}/${idUser}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .pipe(
           finalize(() => {
+            this.loadingService.hideLoading();
           })
         )
     );

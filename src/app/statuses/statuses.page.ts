@@ -22,10 +22,11 @@ import { StatusItemComponent } from '../status-item/status-item.component';
 import { contactStatusMock } from 'src/mocks/statusesMocks';
 import { addIcons } from 'ionicons';
 import { cameraOutline } from 'ionicons/icons';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { FetchesService } from '../fetches.service';
 import { ToastService } from '../toast.service';
 import { LoadingService } from '../loading.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-statuses',
@@ -54,7 +55,7 @@ import { LoadingService } from '../loading.service';
   ],
 })
 export class StatusesPage implements OnInit {
-  public contactStatus = contactStatusMock;
+  public contactStatus: Array<any> = [];
   public myInfoStatus = {
     contact: {
       id: '',
@@ -84,6 +85,19 @@ export class StatusesPage implements OnInit {
   async ngOnInit() {
     this.loadMyStatus();
     await this.loadStatuses();
+
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe(async (event) => {
+        if (event.url === '/tabs/statuses') {
+          this.loadMyStatus();
+          this.loadStatusesWithoutLoader();
+        }
+      });
   }
 
   goToNewStatus() {
@@ -92,10 +106,14 @@ export class StatusesPage implements OnInit {
 
   goToNewOrViewStatus() {
     if (this.myInfoStatus.status.length > 0) {
-      this.router.navigate(['/view-status']);
+      this.router.navigate(['/edit-status']);
     } else {
       this.router.navigate(['/new-status']);
     }
+  }
+
+  goToViewStatus(idContact: string) {
+    this.router.navigate(['/view-status', idContact]);
   }
 
   async loadStatuses() {
@@ -119,12 +137,26 @@ export class StatusesPage implements OnInit {
     }
   }
 
+  async loadStatusesWithoutLoader() {
+    try {
+      const newStatuses =
+        (await this.fetchesServices.obtainAllContactsStatus()) as any;
+
+      this.contactStatus = newStatuses.data;
+    } catch (error) {
+      console.error(error);
+      this.toast.showToast({
+        message: 'Error al cargar los estados',
+        type: 'danger',
+      });
+    }
+  }
+
   async loadMyStatus() {
     try {
       // this.loading.showLoading('Cargando tu estado');
       const newStatus = (await this.fetchesServices.obtainMyStatuses()) as any;
       this.loading.hideLoading();
-
 
       this.myInfoStatus = {
         ...newStatus,
@@ -135,7 +167,6 @@ export class StatusesPage implements OnInit {
           userName: newStatus.contact.userName,
         },
       };
-
     } catch (error) {
       console.error(error);
       this.toast.showToast({

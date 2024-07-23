@@ -25,29 +25,7 @@ import {
   ],
 })
 export class StatusItemComponent implements OnInit {
-  @Input() status: StatusItem = {
-    contact: {
-      id: '1',
-      name: 'John Doe',
-      image: 'https://ionicframework.com/docs/img/demos/card-media.png',
-    },
-    status: [
-      {
-        id: '1',
-        description: 'Hello World',
-        date: '2021-01-01',
-        seen: ['2'],
-        image: 'https://via.placeholder.com/150',
-      },
-      {
-        id: '1',
-        description: 'Hello World',
-        date: '2021-01-01',
-        seen: ['2'],
-        image: 'https://via.placeholder.com/150',
-      },
-    ],
-  };
+  @Input() status!: StatusItem;
 
   constructor() {}
 
@@ -55,40 +33,53 @@ export class StatusItemComponent implements OnInit {
     console.log(this.status);
   }
 
-  calculateTimeAgo(): string {
-    const dateStatus = this.status.status[this.status.status.length - 1].date;
+  calculateTimeAgo(): any {
+    if (!this.status.status.length || this.status.status.length === 0)
+      return 'Crea un nuevo estado';
 
-    const timeUnits = [
-      { limit: 60, div: 1, text: 'segundos' },
-      { limit: 3600, div: 60, text: 'minutos' },
-      { limit: 86400, div: 3600, text: 'horas' },
-      { limit: 2592000, div: 86400, text: 'días' },
-      { limit: 31104000, div: 2592000, text: 'meses' },
-      { div: 31104000, text: 'años' },
-    ];
+    try {
+      const dateStatus =
+        this.status.status[this.status.status.length - 1]?.date;
 
-    const secondsAgo =
-      (new Date().getTime() - new Date(dateStatus).getTime()) / 1000;
-    const unit = timeUnits.find((u) => !u.limit || secondsAgo < u.limit);
+      if (!dateStatus) return;
 
-    if (!unit) return 'Hace un tiempo';
+      const timeUnits = [
+        { limit: 60, div: 1, text: 'segundos' },
+        { limit: 3600, div: 60, text: 'minutos' },
+        { limit: 86400, div: 3600, text: 'horas' },
+        { limit: 2592000, div: 86400, text: 'días' },
+        { limit: 31104000, div: 2592000, text: 'meses' },
+        { div: 31104000, text: 'años' },
+      ];
 
-    return `${Math.floor(secondsAgo / unit.div)} ${unit.text} atrás`;
-  }
+      const secondsAgo =
+        (new Date().getTime() - new Date(dateStatus).getTime()) / 1000;
+      const unit = timeUnits.find((u) => !u.limit || secondsAgo < u.limit);
 
-  getDashArray() {
+      if (!unit) return 'Hace un tiempo';
 
-    const count = this.status.status.length
-
-    const numberOfDots = 2 * 3.14 * 48 / (count)
-
-    return {
-      "stroke-dasharray": `${numberOfDots} 2`,
-      "stroke-dashoffset": `${numberOfDots}`
+      return `${Math.floor(secondsAgo / unit.div)} ${unit.text} atrás`;
+    } catch (error) {
+      return 'Hace un tiempo';
     }
   }
 
+  getDashArray() {
+    const count = this.status.status.length;
 
+    if (count === 0)
+      return { 'stroke-dasharray': `0 0`, 'stroke-dashoffset': `0 0` ,
+        'stroke': "transparent"
+      };
+
+    const numberOfDots = (2 * 3.14 * 48) / count;
+
+    return {
+      'stroke-dasharray': `${numberOfDots} 2`,
+      'stroke-dashoffset': `${numberOfDots}`,
+      'stroke': "green"
+    };
+  }
 }
 
 interface StatusItem {

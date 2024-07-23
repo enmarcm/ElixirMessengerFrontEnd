@@ -10,6 +10,7 @@ import {
   IonInput,
   IonButtons,
   IonBackButton,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { PhotoService } from '../services/photo.service';
 import { ToastService } from '../toast.service';
@@ -24,6 +25,7 @@ import { FetchesService } from '../fetches.service';
   styleUrls: ['./new-status.page.scss'],
   standalone: true,
   imports: [
+    IonSpinner,
     IonBackButton,
     IonButtons,
     IonInput,
@@ -59,20 +61,16 @@ export class NewStatusPage implements OnInit {
       this.isReady = false;
       this.loading.showLoading('Cargando...');
 
-      const photoBlobOrFile = await this.photoService.addNewToGallery();
+      const photoBlobOrFile =
+        (await this.photoService.addNewToGallery()) as any;
 
       this.currentImageWeb = photoBlobOrFile.webviewPath;
 
-      let photoFile: File;
-      if (photoBlobOrFile instanceof Blob) {
-        photoFile = new File([photoBlobOrFile], 'photo.jpg', {
-          type: photoBlobOrFile.type,
-        });
-      } else {
-        photoFile = photoBlobOrFile as any;
-      }
+      const randomName = crypto.getRandomValues(new Uint32Array(1))[0];
 
-      this.upload.uploadFile(photoFile).subscribe((url) => {
+      const filePhoto = photoBlobOrFile.file;
+
+      this.upload.uploadFile(filePhoto).subscribe((url) => {
         this.currentImage = url;
         this.isReady = true;
         this.toast.showToast({
@@ -117,7 +115,7 @@ export class NewStatusPage implements OnInit {
         message: 'Estado agregado con éxito.',
         type: 'success',
       });
-      this.router.navigate(['/statuses']);
+      this.router.navigate(['/tabs/statuses']);
     } catch (error) {
       console.error('Ocurrió un error al agregar el estado:', error);
 

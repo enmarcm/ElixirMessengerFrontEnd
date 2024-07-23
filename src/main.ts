@@ -19,7 +19,11 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import {
+  register as registerSwiperElement
+} from "swiper/element/bundle"
 
+registerSwiperElement();
 defineCustomElements(window);
 if (environment.production) {
   enableProdMode();
@@ -36,4 +40,5 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
   ],
+  
 });

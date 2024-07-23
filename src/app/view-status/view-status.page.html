@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button
+        (click)="goToStatuses()"
+        color="light"
+        class="text-white"
+      ></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-title>
+      <div class="flex gap-3">
+        <ion-img class="w-16 h-16" [src]="status.contact.image"></ion-img>
+        <h1 class="text-white text-lg font-normal">Estado</h1>
+      </div>
+    </ion-title> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="h-screen overflow-hidden bg-black">
+  <swiper-container
+    class="h-[90%] bg-black overflow-hidden"
+    [pagination]="{type: 'bullets', clickable: false}"
+  >
+    @for(state of status; track state.id){
+    <swiper-slide class="h-full min-h-[700px]">
+      <div class="w-full h-full flex flex-col justify-start items-center bg-black">
+        <!-- Ajuste de tamaño con Tailwind CSS -->
+        <img
+          [src]="state.image"
+          alt="Estado"
+          class="max-w-[90%] max-h-[70%] object-cover"
+        />
+
+        <div
+          class="absolute mb-32 bottom-0 left-0 right-0 p-4 bg-gray-400 bg-opacity-80"
+        >
+          <h2 class="text-white text-sm font-normal">
+            {{ state.description }}
+          </h2>
+        </div>
+      </div>
+    </swiper-slide>
+    }
+  </swiper-container>
+
+  <div class="flex items-center justify-between p-4 flex-grow">
+    <ion-input
+      placeholder="Escribe tu respuesta"
+      class="w-4/5"
+      [(ngModel)]="contentAnswer"
+      ngDefaultControl
+    ></ion-input>
+
+    <ion-button class="flex-grow" shape="round" (click)="answerStatus()">
+      <ion-icon name="send-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

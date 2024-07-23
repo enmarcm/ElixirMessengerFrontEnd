@@ -37,8 +37,12 @@
     </ion-row>
   </ion-grid>
   }@else { @for(contact of contactStatus; track contact.contact.id){
-  <app-status-item [status]="contact"></app-status-item>
-  } }
+  @if(contact.status.length > 0){
+  <app-status-item
+    [status]="contact"
+    (click)="goToViewStatus(contact.contact.idUser)"
+  ></app-status-item>
+  } } }
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button color="secondary" (click)="goToNewStatus()">
@@ -46,4 +50,3 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
-
