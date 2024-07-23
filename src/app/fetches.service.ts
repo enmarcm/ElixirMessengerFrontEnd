@@ -226,7 +226,6 @@ export class FetchesService {
 
   obtainAllContactsStatus() {
     const token = localStorage.getItem('token');
-    this.loadingService.showLoading('Obteniendo estados');
 
     return firstValueFrom(
       this.httpClient
@@ -237,7 +236,6 @@ export class FetchesService {
         })
         .pipe(
           finalize(() => {
-            this.loadingService.hideLoading();
           })
         )
     );
@@ -280,6 +278,23 @@ export class FetchesService {
         .pipe(
           finalize(() => {
             this.loadingService.hideLoading();
+          })
+        )
+    );
+  }
+
+  obtainMyStatuses() {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(URL_REQUEST.GET_MY_STATUS, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(
+          finalize(() => {
           })
         )
     );

@@ -15,4 +15,5 @@ export enum URL_REQUEST {
   GET_CONTACTS_STATUS = `${BASE_URL}/status/getAllStatusContacts`,
   ADD_STATUS = `${BASE_URL}/status/createStatus`,
   DELETE_STATUS = `${BASE_URL}/status/deleteStatus`,
+  GET_MY_STATUS = `${BASE_URL}/status/getMyStatus`,
 }
