@@ -45,4 +45,8 @@ export const routes: Routes = [
     path: 'view-status/:idUser',
     loadComponent: () => import('./view-status/view-status.page').then( m => m.ViewStatusPage)
   },
+  {
+    path: 'edit-status',
+    loadComponent: () => import('./edit-status/edit-status.page').then( m => m.EditStatusPage)
+  },
 ];

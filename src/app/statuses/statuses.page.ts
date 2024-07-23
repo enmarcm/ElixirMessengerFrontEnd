@@ -124,14 +124,14 @@ export class StatusesPage implements OnInit {
         (await this.fetchesServices.obtainAllContactsStatus()) as any;
 
       this.contactStatus = newStatuses.data;
-      this.loading.hideLoading();
+      // this.loading.hideLoading();
     } catch (error) {
       console.error(error);
       this.toast.showToast({
         message: 'Error al cargar los estados',
         type: 'danger',
       });
-      this.loading.hideLoading();
+      // this.loading.hideLoading();
     } finally {
       this.loading.hideLoading();
     }

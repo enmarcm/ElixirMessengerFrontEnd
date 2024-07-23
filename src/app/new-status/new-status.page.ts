@@ -51,6 +51,7 @@ export class NewStatusPage implements OnInit {
   public currentImageWeb: any = null;
   public inputDescription: string = '';
   public isReady: boolean = false;
+  public filePhoto: null | string = null;
 
   ngOnInit() {
     this.addPhotoToGallery();
@@ -59,6 +60,9 @@ export class NewStatusPage implements OnInit {
   async addPhotoToGallery() {
     try {
       this.isReady = false;
+      this.filePhoto = null;
+      this.currentImageWeb = null;
+
       this.loading.showLoading('Cargando...');
 
       const photoBlobOrFile =
@@ -66,11 +70,11 @@ export class NewStatusPage implements OnInit {
 
       this.currentImageWeb = photoBlobOrFile.webviewPath;
 
-      const randomName = crypto.getRandomValues(new Uint32Array(1))[0];
+      this.filePhoto = photoBlobOrFile.file;
 
-      const filePhoto = photoBlobOrFile.file;
+      if (!this.filePhoto) throw new Error('User cancelled photos app');
 
-      this.upload.uploadFile(filePhoto).subscribe((url) => {
+      this.upload.uploadFile(this.filePhoto as any).subscribe((url) => {
         this.currentImage = url;
         this.isReady = true;
         this.toast.showToast({

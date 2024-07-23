@@ -264,7 +264,6 @@ export class FetchesService {
   deleteStatus(idStatus: string) {
     const token = localStorage.getItem('token');
 
-    this.loadingService.showLoading('Eliminando estado');
     return firstValueFrom(
       this.httpClient
         .delete(`${URL_REQUEST.DELETE_STATUS}/${idStatus}`, {
@@ -272,11 +271,7 @@ export class FetchesService {
             Authorization: `Bearer ${token}`,
           },
         })
-        .pipe(
-          finalize(() => {
-            this.loadingService.hideLoading();
-          })
-        )
+        .pipe(finalize(() => {}))
     );
   }
 

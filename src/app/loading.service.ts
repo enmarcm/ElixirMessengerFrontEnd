@@ -17,11 +17,14 @@ export class LoadingService {
         message: message,
         spinner: 'crescent',
         cssClass: 'custom-loading',
+
       });
 
       await this.loading.present();
       this.isLoadingShown = true;
       resolve();
+
+    
     });
 
     await this.loadingPromise;
