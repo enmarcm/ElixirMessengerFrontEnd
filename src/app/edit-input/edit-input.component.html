@@ -1,0 +1,24 @@
+<div class="flex gap-4 px-4 py-2 justify-between">
+  <ion-input
+    [(ngModel)]="defaultValue"
+    class="w-[80%]"
+    [label]="label"
+    label-placement="floating"
+    fill="solid"
+    color="primary"
+    [disabled]="!isEditing"
+    ngDefaultControl
+  ></ion-input>
+
+  <div class="w-[6%] flex flex-col items-center justify-center">
+    @if(!isEditing){
+    <ion-button shape="round" color="warning" (click)="edit()">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-button>
+    }@else {
+    <ion-button shape="round" color="success" (click)="execute()">
+      <ion-icon name="checkmark-done-outline"></ion-icon>
+    </ion-button>
+    }
+  </div>
+</div>

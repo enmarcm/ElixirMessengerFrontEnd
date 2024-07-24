@@ -179,6 +179,7 @@ export class ChatPage implements OnInit {
   }
 
   private async obtainMessages() {
+    this.loading.showLoading('Obteniendo los mensajes');
     try {
       const messages = (await this.fetches.obtainMessagesByChatId({
         idChat: this.chatId,
@@ -191,6 +192,8 @@ export class ChatPage implements OnInit {
         message: 'Error al obtener mensajes',
         type: 'danger',
       });
+    } finally {
+      this.loading.hideLoading();
     }
   }
 

@@ -1,0 +1,72 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToChats()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="px-4 py-2">
+    <ion-row class="h-[30%]">
+      <ion-col size="12">
+        <div class="flex flex-col justify-center items-center">
+          <div class="w-36 h-full relative">
+            <ion-img
+              class="rounded-full object-cover w-full h-full min-h-36 min-w-36"
+              [src]="profileData.image"
+            ></ion-img>
+            <ion-button class="absolute bottom-0 right-0 mb-2 mr-2" fill="clear">
+              <ion-icon color="dark" name="pencil-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onFileSelectedImage($event)"
+                class="absolute top-0 left-0 w-full h-full opacity-0"/>
+            </ion-button>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="h-[60%]">
+      <ion-col size="12" class="h-full flex flex-col gap-5">
+        <!-- Input para el usuario -->
+        <edit-input
+          [defaultValue]="profileData.userName"
+          label="UserName"
+          propName="userName"
+          
+        />
+
+        <!-- Input para el correo -->
+        <edit-input
+          [defaultValue]="profileData.email"
+          label="Email"
+          propName="email"
+          
+        />
+
+        <!-- Input para la clave -->
+        <edit-input
+          [defaultValue]="''"
+          label="Contraseña"
+          propName="password"
+          
+        />
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="h-[10%] mt-5">
+      <ion-col size="12">
+        <ion-button
+          (click)="alertDelete()"
+          shape="round"
+          fill="outline"
+          color="danger"
+          expand="block"
+          >Eliminar cuenta</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

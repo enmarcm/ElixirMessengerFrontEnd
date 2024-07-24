@@ -1,8 +1,8 @@
 <ion-header [translucent]="true">
-  <ion-buttons slot="start">
-    <ion-back-button (click)="goToStatus()"></ion-back-button>
-  </ion-buttons>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToStatus()"></ion-back-button>
+    </ion-buttons>
     <ion-title>Editar estados</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -56,7 +56,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding bg-black">
-        <div class="h-[400px]">
+        <div class="h-[400px] flex flex-col items-center justify-center">
           <img
             class="max-w-80 max-h-[80%] object-cover"
             [src]="imageSelected"

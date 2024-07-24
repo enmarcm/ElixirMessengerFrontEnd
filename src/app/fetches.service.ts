@@ -89,7 +89,7 @@ export class FetchesService {
   }) {
     const token = localStorage.getItem('token');
 
-    this.loadingService.showLoading('Cargando mensajes');
+    // this.loadingService.showLoading('Cargando mensajes');
     return firstValueFrom(
       this.httpClient
         .get(`${URL_REQUEST.GET_MESSAGES_CHAT}/${idChat}/${page}`, {
@@ -99,7 +99,7 @@ export class FetchesService {
         })
         .pipe(
           finalize(() => {
-            this.loadingService.hideLoading();
+            // this.loadingService.hideLoading();
           })
         )
     );
@@ -317,6 +317,34 @@ export class FetchesService {
           this.loadingService.hideLoading();
         })
       )
+    );
+  }
+
+  deleteAccount() {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .delete(URL_REQUEST.DELETE_ACCOUNT, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  updateUser(update: any) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .put(URL_REQUEST.UPDATE_USER, update, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
     );
   }
 }

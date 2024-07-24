@@ -19,4 +19,6 @@ export enum URL_REQUEST {
   GET_MY_STATUS = `${BASE_URL}/status/getMyStatus`,
   GET_STATUS_USER = `${BASE_URL}/status/getStatusUser`,
   REGISTER = `${BASE_URL}/auth/register`,
+  DELETE_ACCOUNT = `${BASE_URL}/profile/dellete`,
+  UPDATE_USER = `${BASE_URL}/profile/update`,
 }
