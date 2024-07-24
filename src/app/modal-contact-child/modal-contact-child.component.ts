@@ -93,10 +93,11 @@ export class ModalContactChildComponent implements OnInit {
     try {
       const name = event.target.value;
 
-      this.loading.showLoading();
+      this.loading.showLoading('Buscando usuario');
       const result = (await this.fetcheService.verifyUserExist(name)) as any;
       this.isValid = result ? true : false;
 
+      
       if (!result) {
         this.toastService.showToast({
           message: 'Usuario no encontrado',

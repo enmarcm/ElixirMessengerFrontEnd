@@ -7,56 +7,63 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="px-2 py-4 flex flex-col">
-    <ion-list>
-      <ion-item class="mb-4 flex gap-6 justify-center items-center">
-        <ion-input
-          fill="outline"
-          label="Username o correo"
-          color="success"
-          labelPlacement="floating"
-          [(ngModel)]="searchUser.dataInput"
-          class="w-[80%]"
-        ></ion-input>
+<ion-content [fullscreen]="true" class="w-full">
+  <div class="px-2 py-4 flex flex-col w-full">
+  <ion-list class="w-full">
+    <ion-item >
+      <div class="mb-4 flex gap-6 justify-center items-center w-full">
+        <div class="w-[60%]">
+          <ion-input
+            fill="outline"
+            label="Username o correo"
+            color="success"
+            labelPlacement="floating"
+            [(ngModel)]="searchUser.dataInput"
+            ngDefaultControl
+          ></ion-input>
+        </div>
+  
+        <div class="w-[6%]">
+          <ion-button
+            color="secondary"
+            fill="outline"
+            shape="round"
+            (click)="searchUserFunction()"
+            size="default"
+          >
+            <ion-icon name="search-outline" color="secondary"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      
+    </ion-item>
 
-        <ion-button
-          color="warning"
-          fill="outline"
-          shape="round"
-          (click)="searchUserFunction()"
-          size="default"
-        >
-          <ion-icon name="search-outline"></ion-icon>
-        </ion-button>
-      </ion-item>
+    @if(isValidUser){
+    <ion-card class="flex gap-4" (click)="goToChatNoContact()">
+      <ion-img
+        alt="user"
+        [src]="searchUser.image"
+        class="max-h-16 max-w-16 mx-auto"
+      />
+      <ion-card-header class="flex flex-grow">
+        <ion-card-title>{{searchUser.userName}}</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+    } @for(contact of contacts; track contact.id){
+    <ion-item (click)="clickContact(contact)">
+      <ion-avatar slot="start">
+        <ion-img [src]="contact.userContactData.image" />
+      </ion-avatar>
+      <ion-label>{{ contact.name }}</ion-label>
+    </ion-item>
 
-      @if(isValidUser){
-      <ion-card class="flex gap-4" (click)="goToChatNoContact()">
-        <ion-img
-          alt="user"
-          [src]="searchUser.image"
-          class="max-h-16 max-w-16 mx-auto"
-        />
-        <ion-card-header class="flex flex-grow">
-          <ion-card-title>{{searchUser.userName}}</ion-card-title>
-        </ion-card-header>
-      </ion-card>
-      } @for(contact of contacts; track contact.id){
-      <ion-item (click)="clickContact(contact)">
-        <ion-avatar slot="start">
-          <ion-img [src]="contact.userContactData.image" />
-        </ion-avatar>
-        <ion-label>{{ contact.name }}</ion-label>
-      </ion-item>
-
-      }
-    </ion-list>
-    <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-      <ion-infinite-scroll-content
-        loadingText="Cargando..."
-        loadingSpinner="bubbles"
-      ></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    }
+  </ion-list>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingText="Cargando..."
+      loadingSpinner="bubbles"
+    ></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
   </div>
 </ion-content>

@@ -119,24 +119,28 @@ export class NewChatPage implements OnInit {
     )) as any;
     await this.loadingService.hideLoading();
 
-    console.log(isChat);
-
     if (isChat) {
       this.router.navigate(['/chat', contact.idUserContact, isChat.id]);
       return;
     }
 
     //Si no existe, crear el chat y redirigir
+    const result = await this.fetchesService.createChat(contact.idUserContact) as any;
+
+    console.log(result)
+    if (result) {
+      this.router.navigate(['/chat', contact.idUserContact, result.addChatToSender.id]);
+    }
   }
 
   async searchUserFunction() {
     try {
-      this.loadingService.showLoading()
+      this.loadingService.showLoading();
       const userExist = (await this.fetchesService.verifyUserExist(
         this.searchUser.dataInput
       )) as any;
 
-      await this.loadingService.hideLoading()
+      await this.loadingService.hideLoading();
       if (!userExist) {
         this.isValidUser = false;
         return;
@@ -157,13 +161,11 @@ export class NewChatPage implements OnInit {
 
   async goToChatNoContact() {
     try {
-      this.loadingService.showLoading('Creando chat');
+      this.loadingService.showLoading('Cargando chat', 850);
       const chatCreated = (await this.fetchesService.createChat(
         this.searchUser.idUser,
         false
       )) as any;
-      this.loadingService.hideLoading();
-
 
       const { addChatToSender } = chatCreated;
 
@@ -174,10 +176,10 @@ export class NewChatPage implements OnInit {
           addChatToSender.id,
         ]);
       }
+      this.toast.showToast({ type: 'success', message: 'Estas en el chat' });
     } catch (error) {
       this.toast.showToast({ type: 'danger', message: 'Error al crear chat' });
     }
-
   }
 }
 

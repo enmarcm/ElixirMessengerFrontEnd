@@ -11,7 +11,19 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonIcon,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { trashOutline } from 'ionicons/icons';
+import { FetchesService } from '../fetches.service';
+import { LoadingService } from '../loading.service';
+import { ToastService } from '../toast.service';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { ChatNotificationService } from '../chat-notification.service';
 
 @Component({
   selector: 'chat-item',
@@ -19,6 +31,10 @@ import {
   styleUrls: ['./chat-item.component.scss'],
   standalone: true,
   imports: [
+    IonIcon,
+    IonItemOption,
+    IonItemOptions,
+    IonItemSliding,
     IonCol,
     IonRow,
     IonGrid,
@@ -56,9 +72,73 @@ export class ChatItemComponent implements OnInit {
       : '';
   }
 
-  constructor() {}
+  constructor(
+    private fetches: FetchesService,
+    private load: LoadingService,
+    private toast: ToastService,
+    private alert: AlertController,
+    private router: Router,
+    private chatNotification : ChatNotificationService
+  ) {
+    addIcons({ trashOutline });
+  }
+
   ngOnInit() {
     console.log('Este es el mensaje inicial');
+  }
+
+  async deleteChat() {
+    try {
+      this.load.showLoading('Eliminando chat');
+      const result = await this.fetches.deleteChat(this.chat.id);
+      this.load.hideLoading();
+
+      if (result) {
+        this.toast.showToast({ message: 'Chat eliminado', type: 'success' });
+      } else {
+        this.toast.showToast({
+          message: 'No se pudo eliminar el chat',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      this.load.hideLoading();
+      this.toast.showToast({
+        message: 'No se pudo eliminar el chat',
+        type: 'error',
+      });
+    }
+
+    this.chatNotification.notifyChatDeletion();
+
+  }
+
+  public alertButtons = [
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+      handler: () => {
+        console.log('Alert canceled');
+      },
+    },
+    {
+      text: 'Si estoy seguro',
+      role: 'confirm',
+      handler: () => {
+        this.deleteChat();
+      },
+    },
+  ];
+  async presentAlert(event: MouseEvent) {
+    event.stopPropagation();
+
+    const alert = await this.alert.create({
+      header: 'Estas seguro?',
+      message: 'Cuando borres este chat no podras recuperar los mensajes.',
+      buttons: this.alertButtons,
+    });
+
+    await alert.present();
   }
 }
 

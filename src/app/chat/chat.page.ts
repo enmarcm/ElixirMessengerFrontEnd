@@ -179,11 +179,12 @@ export class ChatPage implements OnInit {
   }
 
   private async obtainMessages() {
-    this.loading.showLoading('Obteniendo los mensajes');
     try {
+      this.loading.showLoading('Obteniendo los mensajes');
       const messages = (await this.fetches.obtainMessagesByChatId({
         idChat: this.chatId,
       })) as Array<any>;
+      this.loading.hideLoading();
 
       this.messages = messages;
       this.scrollToBottom();
@@ -192,9 +193,7 @@ export class ChatPage implements OnInit {
         message: 'Error al obtener mensajes',
         type: 'danger',
       });
-    } finally {
-      this.loading.hideLoading();
-    }
+    } 
   }
 
   private scrollToBottom() {
@@ -204,7 +203,7 @@ export class ChatPage implements OnInit {
   }
 
   goToChats() {
-    this.router.navigate(['/chats']);
+    this.router.navigate(['/tabs/chats']);
   }
 }
 

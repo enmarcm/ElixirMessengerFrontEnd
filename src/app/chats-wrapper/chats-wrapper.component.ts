@@ -2,12 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ChatItemComponent } from '../chat-item/chat-item.component';
 import { ChatsPageMock } from 'src/mocks/chatsPageMock';
 import { IonList } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ChatService } from '../socket.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { FetchesService } from '../fetches.service';
 import { ToastService } from '../toast.service';
 import { LoadingService } from '../loading.service';
+import { ChatNotificationService } from '../chat-notification.service';
 
 @Component({
   selector: 'chats-wrapper',
@@ -25,11 +26,26 @@ export class ChatsWrapperComponent implements OnInit {
     private chatService: ChatService,
     private fetches: FetchesService,
     private toast: ToastService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private chatNotificationService: ChatNotificationService
   ) {}
 
+  async loadChats() {
+    this.chats = await this.obtainChats(1, false);
+  }
+
   async ngOnInit() {
-    
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        if (event.url === '/tabs/chats') {
+          this.loadChats();
+        }
+      });
+
+    this.chatNotificationService.chatDeleted$.subscribe(() => {
+      this.loadChats();
+    });
 
     this.chatService.connect();
 
@@ -78,8 +94,6 @@ export class ChatsWrapperComponent implements OnInit {
     });
 
     this.chats = await this.obtainChats();
-    console.log('Estos son los chats iniciales, revisar');
-    console.log(this.chats);
   }
 
   async obtainChats(page = 1, loading = true) {
@@ -89,9 +103,14 @@ export class ChatsWrapperComponent implements OnInit {
         loading
       )) as Array<ChatInterface>;
 
+      if (chats.length === 0 || !chats) {
+        return [];
+      }
+
       const sortedChats = this.sortChatsByDate(chats);
       return sortedChats;
     } catch (error) {
+      console.error(error);
       this.toast.showToast({
         message: 'Error al obtener chats',
         type: 'danger',

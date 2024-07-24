@@ -11,20 +11,18 @@ export class LoadingService {
 
   constructor(private loadingController: LoadingController) {}
 
-  async showLoading(message: string = 'Loading...') {
+  async showLoading(message: string = 'Loading...', duration: number = 0) {
     this.loadingPromise = new Promise(async (resolve) => {
       this.loading = await this.loadingController.create({
         message: message,
         spinner: 'crescent',
         cssClass: 'custom-loading',
-
+        duration: duration ? duration : undefined,
       });
 
       await this.loading.present();
       this.isLoadingShown = true;
       resolve();
-
-    
     });
 
     await this.loadingPromise;

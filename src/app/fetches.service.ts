@@ -125,6 +125,7 @@ export class FetchesService {
 
   createChat(idUserReceiver: string, twoChats = true) {
     const token = localStorage.getItem('token');
+    
 
     return firstValueFrom(
       this.httpClient
@@ -139,7 +140,6 @@ export class FetchesService {
         )
         .pipe(
           finalize(() => {
-            this.loadingService.hideLoading();
           })
         )
     );
@@ -340,6 +340,34 @@ export class FetchesService {
     return firstValueFrom(
       this.httpClient
         .put(URL_REQUEST.UPDATE_USER, update, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  deleteChat(idChat: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .delete(`${URL_REQUEST.DELETE_CHAT}/${idChat}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  deleteContact(idContact: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .delete(`${URL_REQUEST.DELETE_CONTACT}/${idContact}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
