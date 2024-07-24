@@ -24,7 +24,6 @@ import { ToastService } from '../toast.service';
 import { FetchesService } from '../fetches.service';
 import { addIcons } from 'ionicons';
 import { micOutline, send } from 'ionicons/icons';
-import { UploadService } from '../upload.service';
 import { AudioService } from '../audio.service';
 
 @Component({
@@ -61,6 +60,7 @@ export class ChatPage implements OnInit {
       'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
   } as UserInfo;
   pressTimer: any;
+  public isPlayingAudio = false;
 
   @ViewChild(IonContent, { static: false }) content: IonContent = this
     .messages as any;
@@ -298,6 +298,16 @@ export class ChatPage implements OnInit {
   trackByFn(id: string) {
     const randomCrypt = crypto.getRandomValues(new Uint32Array(1))[0] & 0x3f;
     return `${randomCrypt}_${id}`;
+  }
+
+  playAudio(event: any) {
+    // Detener todos los audios excepto el que disparó el evento play
+    const allAudios = document.querySelectorAll('audio');
+    allAudios.forEach(audio => {
+      if (audio !== event.target) {
+        audio.pause();
+      }
+    });
   }
 }
 

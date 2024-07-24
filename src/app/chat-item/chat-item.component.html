@@ -16,7 +16,12 @@
             >{{ chat.userLastMessage.userName }}:
           </span>
 
+          @if(chat.lastMessageContent.message.type === "audio"){
+          <span class="text-gray-500 text-sm">Nota de voz</span>
+          }@else{
           <span class="text-gray-500 text-sm">{{ getLastMessage() }}</span>
+
+          }
         </div>
       </div>
     </ion-label>
@@ -37,7 +42,11 @@
   </ion-item>
 
   <ion-item-options>
-    <ion-item-option color="danger" class="z-[19000]" (click)="presentAlert($event)">
+    <ion-item-option
+      color="danger"
+      class="z-[19000]"
+      (click)="presentAlert($event)"
+    >
       <ion-icon name="trash-outline"></ion-icon>
     </ion-item-option>
   </ion-item-options>

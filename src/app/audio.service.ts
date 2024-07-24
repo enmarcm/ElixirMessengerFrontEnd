@@ -28,7 +28,7 @@ export class AudioService {
 
       this.toast.showToast({
         message: 'Grabación iniciada',
-        type: 'warn',
+        type: 'warning',
         position: 'top',
         duration: 400,
       });
