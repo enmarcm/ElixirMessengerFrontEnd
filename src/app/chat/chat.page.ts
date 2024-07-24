@@ -23,7 +23,9 @@ import { LoadingService } from '../loading.service';
 import { ToastService } from '../toast.service';
 import { FetchesService } from '../fetches.service';
 import { addIcons } from 'ionicons';
-import { send } from 'ionicons/icons';
+import { micOutline, send } from 'ionicons/icons';
+import { UploadService } from '../upload.service';
+import { AudioService } from '../audio.service';
 
 @Component({
   selector: 'app-chat',
@@ -53,10 +55,12 @@ export class ChatPage implements OnInit {
   public newMessage: string = 'value';
   public receiverId = '';
   public chatId = '';
+  public isAudioButton = false;
   public userReceiverInfo = {
     image:
       'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
   } as UserInfo;
+  pressTimer: any;
 
   @ViewChild(IonContent, { static: false }) content: IonContent = this
     .messages as any;
@@ -67,10 +71,27 @@ export class ChatPage implements OnInit {
     private loading: LoadingService,
     private toast: ToastService,
     private fetches: FetchesService,
-    private router: Router
+    private router: Router,
+    private audioService: AudioService
   ) {
     this.newMessage = '';
-    addIcons({ send });
+    addIcons({ send, micOutline });
+  }
+
+  startPress() {
+    this.isAudioButton = true;
+    this.startRecording();
+  }
+
+  stopPress() {
+    this.isAudioButton = false;
+    this.stopRecording();
+  }
+
+  onSwipe(event: any) {
+    if (event.direction === 2) {
+      this.isAudioButton = !this.isAudioButton;
+    }
   }
 
   async ngOnInit() {
@@ -193,7 +214,7 @@ export class ChatPage implements OnInit {
         message: 'Error al obtener mensajes',
         type: 'danger',
       });
-    } 
+    }
   }
 
   private scrollToBottom() {
@@ -204,6 +225,79 @@ export class ChatPage implements OnInit {
 
   goToChats() {
     this.router.navigate(['/tabs/chats']);
+  }
+
+  toggleRecord() {
+    if (this.isAudioButton) {
+      this.stopPress();
+    } else {
+      this.startPress();
+    }
+  }
+
+  sendMessageAudio(url: string) {
+    const token = localStorage.getItem('token') as string;
+    const decoded = jwtDecode(token) as any;
+
+    if (url) {
+      const idUser = localStorage.getItem('userId');
+
+      if (!idUser)
+        return this.toast.showToast({
+          message: 'Error al enviar mensaje',
+          type: 'danger',
+        });
+
+      const message = {
+        typeMessage: 'audio',
+        message: {
+          type: 'audio',
+          content: url,
+        },
+        senderId: localStorage.getItem('userId'),
+        isSendByMe: true,
+        senderData: {
+          userName: decoded.userName,
+          email: decoded.email,
+          role: decoded.role,
+        },
+      };
+
+      this.addToBDD({
+        idReceiver: this.receiverId,
+        typeMessage: 'audio',
+        messageString: message.message.content,
+      });
+
+      this.chatService.sendMessage(this.receiverId, url, 'audio');
+
+      this.messages.push(message);
+      this.newMessage = '';
+      this.scrollToBottom();
+    }
+    return;
+  }
+
+  startRecording() {
+    this.audioService.startRecording();
+  }
+
+  async stopRecording() {
+    try {
+      const audioUrl = await this.audioService.stopRecording();
+
+      await this.sendMessageAudio(audioUrl);
+    } catch (error) {
+      this.toast.showToast({
+        message: 'Error al enviar audio',
+        type: 'danger',
+      });
+    }
+  }
+
+  trackByFn(id: string) {
+    const randomCrypt = crypto.getRandomValues(new Uint32Array(1))[0] & 0x3f;
+    return `${randomCrypt}_${id}`;
   }
 }
 

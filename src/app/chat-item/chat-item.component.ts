@@ -64,6 +64,8 @@ export class ChatItemComponent implements OnInit {
   }
 
   public getLastMessage() {
+    console.log('Esto es lo ultimo que llego')
+    console.log(this.chat)
     const { type, content } = this.chat.lastMessageContent.message;
     return type === 'text'
       ? content.length > 20

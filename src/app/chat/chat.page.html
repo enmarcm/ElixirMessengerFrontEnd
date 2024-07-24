@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -23,8 +22,8 @@
 
 <ion-content class="bg-gray-200 p-4" [scrollEvents]="true">
   @if(messages.length > 0){
-  <ion-list class="mb-16">
-    @for(message of messages; track (message.id + message.isSendByMe)){
+  <ion-list class="mb-16 flex flex-col gap-2">
+    @for(message of messages; track trackByFn(message.id)){
 
     <ion-item>
       <div
@@ -35,7 +34,11 @@
           class="max-w-[75%] rounded-xl flex"
           [class]="message.isSendByMe ? 'bg-blue-600'  : 'bg-violet-800'"
         >
+          @if(message.message.type === 'audio'){
+          <audio [src]="message.message.content" controls class="my-1"></audio>
+          }@else if (message.message.type === 'text') {
           <div class="p-2 text-white">{{ message.message.content }}</div>
+          }
         </div>
       </div>
     </ion-item>
@@ -51,12 +54,22 @@
       placeholder="Escribe un mensaje..."
       [(ngModel)]="newMessage"
     ></ion-input>
+
     <ion-button
       class="ml-2 bg-blue-600 text-white rounded-full p-2"
-      (click)="sendMessage()" shape="round"
+      (click)="sendMessage()"
+      shape="round"
+      [disabled]="isAudioButton"
     >
       <ion-icon name="send"></ion-icon>
-      <!-- Agrega el ícono de enviar -->
+    </ion-button>
+
+    <ion-button
+      class="ml-2 bg-blue-600 text-white rounded-full p-2"
+      shape="round"
+      (click)="toggleRecord()"
+    >
+      <ion-icon name="mic-outline"></ion-icon>
     </ion-button>
   </ion-item>
 </ion-content>

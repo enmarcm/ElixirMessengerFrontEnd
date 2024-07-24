@@ -11,8 +11,8 @@
   <div class="px-2 py-4 flex flex-col w-full">
   <ion-list class="w-full">
     <ion-item >
-      <div class="mb-4 flex gap-6 justify-center items-center w-full">
-        <div class="w-[60%]">
+      <div class="mb-4 flex justify-between items-center w-full">
+        <div >
           <ion-input
             fill="outline"
             label="Username o correo"
@@ -23,13 +23,13 @@
           ></ion-input>
         </div>
   
-        <div class="w-[6%]">
+        <div class="w-[10%]">
           <ion-button
             color="secondary"
             fill="outline"
             shape="round"
             (click)="searchUserFunction()"
-            size="default"
+            size="small"
           >
             <ion-icon name="search-outline" color="secondary"></ion-icon>
           </ion-button>

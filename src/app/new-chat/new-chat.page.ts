@@ -84,6 +84,8 @@ export class NewChatPage implements OnInit {
     addIcons({ searchOutline });
   }
 
+  
+
   async ngOnInit() {
     try {
       this.contacts =
@@ -112,25 +114,29 @@ export class NewChatPage implements OnInit {
   async obtainDataUserPush(userOrEmail: string) {}
 
   async clickContact(contact: ContactInterface) {
-    //Verificar si ya el chat existe, si existe redirigir,
-    await this.loadingService.showLoading('Verificando chat existente');
-    const isChat = (await this.fetchesService.verifyChatExist(
-      contact.idUserContact
-    )) as any;
-    await this.loadingService.hideLoading();
-
-    if (isChat) {
-      this.router.navigate(['/chat', contact.idUserContact, isChat.id]);
-      return;
-    }
-
-    //Si no existe, crear el chat y redirigir
-    const result = await this.fetchesService.createChat(contact.idUserContact) as any;
-
-    console.log(result)
-    if (result) {
-      this.router.navigate(['/chat', contact.idUserContact, result.addChatToSender.id]);
-    }
+   try {
+     //Verificar si ya el chat existe, si existe redirigir,
+     await this.loadingService.showLoading('Verificando chat existente');
+     const isChat = (await this.fetchesService.verifyChatExist(
+       contact.idUserContact
+     )) as any;
+     await this.loadingService.hideLoading();
+ 
+     if (isChat) {
+       this.router.navigate(['/chat', contact.idUserContact, isChat.id]);
+       return;
+     }
+ 
+     //Si no existe, crear el chat y redirigir
+     const result = await this.fetchesService.createChat(contact.idUserContact) as any;
+ 
+     console.log(result)
+     if (result) {
+       this.router.navigate(['/chat', contact.idUserContact, result.addChatToSender.id]);
+     }
+   } catch (error) {
+    console.error(error)
+   }
   }
 
   async searchUserFunction() {

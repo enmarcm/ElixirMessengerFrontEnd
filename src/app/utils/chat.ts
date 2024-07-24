@@ -9,6 +9,7 @@ export default class ChatManager {
     fetches,
     receiverId,
     chatService,
+    type = 'text',
   }: SendMessage) {
     const token = localStorage.getItem('token') as string;
     const decoded = jwtDecode(token) as any;
@@ -23,9 +24,9 @@ export default class ChatManager {
         });
 
       const message = {
-        typeMessage: 'text',
+        typeMessage: type,
         message: {
-          type: 'text',
+          type,
           content: newMessage,
         },
         senderId: localStorage.getItem('userId'),
@@ -46,7 +47,7 @@ export default class ChatManager {
       });
 
       chatService.sendMessage(receiverId, newMessage);
-      toast.showToast({message: "Se envio el mensaje", type: 'success'});
+      toast.showToast({ message: 'Se envio el mensaje', type: 'success' });
     }
     return;
   }
@@ -89,4 +90,5 @@ interface SendMessage {
   chatService: {
     sendMessage: (receiverId: string, message: string, type?: string) => void;
   };
+  type?: typeMessage;
 }

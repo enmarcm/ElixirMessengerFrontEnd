@@ -13,17 +13,19 @@ export class ToastService {
     message,
     duration = 1500,
     type = 'success',
+    position = 'bottom',
   }: {
     message: string;
     duration?: number;
     type?: string;
+    position?: 'top' | 'bottom' | 'middle';
   }) {
     const cssClass = type === 'success' ? 'toast-success' : 'toast-danger';
 
     this.toast = await this.toastController.create({
       message: message,
       duration: duration,
-      position: 'bottom',
+      position,
       color: type,
       cssClass: cssClass,
     });
