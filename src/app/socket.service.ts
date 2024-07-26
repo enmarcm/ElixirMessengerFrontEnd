@@ -9,11 +9,10 @@ import { BASE_URL } from './constants';
 })
 export class ChatService {
   public socket: any;
-  // public readonly serverUrl = 'http://localhost:9090';
-
   public serverUrl = BASE_URL;
-
   public outgoingMessages = new Subject<any>();
+  public outgoingMessagesGroup = new Subject<any>();
+  private joinedGroups: Set<string> = new Set();
 
   constructor(private loadingService: LoadingService) {
     this.connect();
@@ -30,6 +29,7 @@ export class ChatService {
       console.log('Connected to chat server');
       const token = `Bearer ${localStorage.getItem('token')}`;
       this.socket.emit('register', token);
+      this.rejoinGroups();
     });
 
     this.socket.on('registered', (message: string) => {
@@ -38,6 +38,12 @@ export class ChatService {
 
     this.socket.on('error', (errorMessage: string) => {
       console.error('Socket error:', errorMessage);
+    });
+  }
+
+  private rejoinGroups() {
+    this.joinedGroups.forEach((group) => {
+      this.socket.emit('joinGroup', group);
     });
   }
 
@@ -73,6 +79,48 @@ export class ChatService {
 
   listenForOutgoingMessages(): Observable<any> {
     return this.outgoingMessages.asObservable();
+  }
+
+  joinGroup(group: string) {
+    if (!this.joinedGroups.has(group)) {
+      this.joinedGroups.add(group);
+      this.socket.emit('joinGroup', group);
+    }
+  }
+
+  sendGroupMessage(group: string, message: string, type = 'text') {
+    const senderId = localStorage.getItem('userId');
+
+    const messageObj = {
+      group,
+      sender: senderId,
+      message: {
+        type,
+        content: message,
+      },
+    };
+
+    const objEnviar = {
+      group,
+      sender: senderId,
+      message: messageObj,
+    };
+    this.socket.emit('groupMessage', objEnviar);
+  }
+
+  listenForGroupMessages(): Observable<any> {
+    return new Observable((observer) => {
+      this.socket.on('groupMessage', (message: any) => {
+        observer.next(message);
+      });
+
+      // Cuando el observable se destruye, desconectar el listener específico
+      return () => this.socket.off('groupMessage');
+    });
+  }
+
+  listenForGroupMessagesOutgoing(): Observable<any> {
+    return this.outgoingMessagesGroup.asObservable();
   }
 
   disconnect() {

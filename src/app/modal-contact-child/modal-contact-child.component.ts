@@ -128,7 +128,6 @@ export class ModalContactChildComponent implements OnInit {
         nameContact: this.inputData.contactName,
       })) as any;
 
-      console.log(resultAdd);
 
       if (!resultAdd || resultAdd.error) {
         this.toastService.showToast({
@@ -145,7 +144,7 @@ export class ModalContactChildComponent implements OnInit {
         type: 'success',
       });
 
-      this.router.navigate(['/chats']);
+      this.router.navigate(['/tabs/chats']);
     } catch (error) {
       this.toastService.showToast({
         message: 'Error al agregar contacto',

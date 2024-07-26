@@ -61,4 +61,17 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () => import('./profile/profile.page').then( m => m.ProfilePage)
   },
+  {
+    path: 'groups',
+    redirectTo: '/tabs/groups',
+    pathMatch: 'full',
+  },
+  {
+    path: 'new-group',
+    loadComponent: () => import('./new-group/new-group.page').then( m => m.NewGroupPage)
+  },
+  {
+    path: 'group/:idGroup',
+    loadComponent: () => import('./group/group.page').then( m => m.GroupPage)
+  },
 ];

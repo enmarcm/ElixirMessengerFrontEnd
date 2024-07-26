@@ -89,7 +89,11 @@ export class RegisterPage implements OnInit {
         'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
     } as any;
 
+    console.log(dataParsed)
+
+    this.load.showLoading('Registrando');
     try {
+
       const dataToSend = await this.fetch.register(dataParsed);
       console.log('Data received:', dataToSend);
 
@@ -104,6 +108,8 @@ export class RegisterPage implements OnInit {
         message: 'Error al registrar, intenta de nuevo',
         type: 'danger',
       });
+    }finally{
+      this.load.hideLoading();
     }
   }
 
@@ -192,8 +198,8 @@ export class RegisterPage implements OnInit {
   }
 
   async uploadFileImage(): Promise<void> {
+    this.load.showLoading('Subiendo imagen');
     try {
-      this.load.showLoading('Subiendo imagen');
       if (this.selectedFileImage) {
         try {
           const url = await this.upload
@@ -207,10 +213,8 @@ export class RegisterPage implements OnInit {
           console.error('Error uploading file:', error);
         }
       }
-      this.load.hideLoading();
     } catch (error) {
       console.error('Error uploading file:', error);
-      this.load.hideLoading();
     } finally {
       this.load.hideLoading();
     }

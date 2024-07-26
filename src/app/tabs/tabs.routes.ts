@@ -13,12 +13,13 @@ export const routes: Routes = [
       },
       {
         path: 'statuses',
-        loadComponent: () => import('../statuses/statuses.page').then((m) => m.StatusesPage),
+        loadComponent: () =>
+          import('../statuses/statuses.page').then((m) => m.StatusesPage),
       },
       {
-        path: 'tab3',
+        path: 'groups',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../groups/groups.page').then((m) => m.GroupsPage),
       },
       {
         path: '',

@@ -31,7 +31,7 @@ export class ChatsWrapperComponent implements OnInit {
   ) {}
 
   async loadChats() {
-    this.chats = await this.obtainChats(1, false);
+    await this.obtainChats(1, false);
   }
 
   async ngOnInit() {
@@ -64,10 +64,8 @@ export class ChatsWrapperComponent implements OnInit {
             read: false,
             id: crypto.getRandomValues(new Uint32Array(1))[0].toString(),
           };
-
-          console.log(this.chats[chatIndex]);
         } else {
-          this.obtainChats(1, false);
+          this.obtainChats();
         }
       });
 
@@ -93,7 +91,7 @@ export class ChatsWrapperComponent implements OnInit {
       }
     });
 
-    this.chats = await this.obtainChats();
+    await this.obtainChats();
   }
 
   async obtainChats(page = 1, loading = true) {
@@ -104,18 +102,18 @@ export class ChatsWrapperComponent implements OnInit {
       )) as Array<ChatInterface>;
 
       if (chats.length === 0 || !chats) {
-        return [];
+        this.chats = [];
       }
 
       const sortedChats = this.sortChatsByDate(chats);
-      return sortedChats;
+      this.chats = sortedChats;
     } catch (error) {
       console.error(error);
       this.toast.showToast({
         message: 'Error al obtener chats',
         type: 'danger',
       });
-      return [];
+      this.chats = [];
     } finally {
       this.loadingService.hideLoading();
     }

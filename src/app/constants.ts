@@ -1,5 +1,5 @@
-// export const BASE_URL = 'http://localhost:9090';
-export const BASE_URL = 'https://elixirbackend-production.up.railway.app';
+export const BASE_URL = 'http://localhost:9090';
+// export const BASE_URL = 'https://elixirbackend-production.up.railway.app';
 
 export enum URL_REQUEST {
   LOGIN = `${BASE_URL}/auth/login`,
@@ -23,4 +23,11 @@ export enum URL_REQUEST {
   UPDATE_USER = `${BASE_URL}/profile/update`,
   DELETE_CHAT = `${BASE_URL}/messages/deleteChat`,
   DELETE_CONTACT = `${BASE_URL}/contacts/deleteContact`,
+  GET_ALL_GROUPS = `${BASE_URL}/groups/getAllGroupsUser`,
+  GET_GROUP_MESSAGES = `${BASE_URL}/groups/obtainGroupMessages`,
+  GET_GROUP_BY_ID = `${BASE_URL}/groups/getGroupById`,
+  CREATE_GROUP = `${BASE_URL}/groups/createGroup`,
+  DELETE_GROUP = `${BASE_URL}/groups/deleteGroup`,
+  GET_SIMPLE_CONTACTS = `${BASE_URL}/contacts/getSimpleContacts`,
+  ADD_MESSAGE_TO_GROUP = `${BASE_URL}/groups/addMessageToGroup`,
 }

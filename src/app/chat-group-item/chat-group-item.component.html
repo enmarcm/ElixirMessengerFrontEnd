@@ -1,0 +1,44 @@
+<ion-item-sliding>
+  <ion-item class="border-b border-gray-200">
+    <ion-thumbnail slot="start" class="rounded-full overflow-hidden">
+      <img alt="Chat avatar" [src]="chat.image" class="rounded-full" />
+    </ion-thumbnail>
+    <ion-label>
+      <div class="flex flex-col gap-2">
+        <span class="font-bold">{{ chat.name }}</span>
+
+        <div class="flex gap-2">
+          @if(!isNotMessage){
+          <span class="text-gray-500 text-sm"
+            >{{ chat.lastMessage.user.userName }}:
+          </span>
+
+          } @if(chat.lastMessage.message.type === "audio"){
+          <span class="text-gray-500 text-sm">Nota de voz</span>
+          }@else{
+          <span class="text-gray-500 text-sm">{{
+            !isNotMessage ? getLastMessage() : "No hay mensajes"
+          }}</span>
+
+          }
+        </div>
+      </div>
+    </ion-label>
+    <div class="ml-auto text-right flex flex-col">
+      @if(!isNotMessage){
+      <span class="text-xs text-gray-500"> {{ getDate().date }} </span>
+      <span class="text-xs text-gray-500"> {{ getDate().time }} </span>
+      }
+    </div>
+  </ion-item>
+
+  <ion-item-options>
+    <ion-item-option
+      color="danger"
+      class="z-[19000]"
+      (click)="presentAlert($event)"
+    >
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

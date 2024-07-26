@@ -125,7 +125,6 @@ export class FetchesService {
 
   createChat(idUserReceiver: string, twoChats = true) {
     const token = localStorage.getItem('token');
-    
 
     return firstValueFrom(
       this.httpClient
@@ -138,10 +137,7 @@ export class FetchesService {
             },
           }
         )
-        .pipe(
-          finalize(() => {
-          })
-        )
+        .pipe(finalize(() => {}))
     );
   }
 
@@ -309,12 +305,9 @@ export class FetchesService {
   }
 
   register(register: RegisterData) {
-    this.loadingService.showLoading('Registrando');
-
     return firstValueFrom(
       this.httpClient.post(URL_REQUEST.REGISTER, register).pipe(
         finalize(() => {
-          this.loadingService.hideLoading();
         })
       )
     );
@@ -373,6 +366,132 @@ export class FetchesService {
           },
         })
         .pipe(finalize(() => {}))
+    );
+  }
+
+  obtainAllGroups() {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(URL_REQUEST.GET_ALL_GROUPS, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  obtainGroupMessages(idGroup: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.GET_GROUP_MESSAGES}/${idGroup}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  obtainGroupById(idGroup: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(`${URL_REQUEST.GET_GROUP_BY_ID}/${idGroup}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  createGroup({
+    name,
+    users,
+    description,
+    image,
+  }: {
+    name: string;
+    users: Array<string>;
+    description: string;
+    image: string;
+  }) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .post(
+          URL_REQUEST.CREATE_GROUP,
+          { name, idUsers: users, description, image },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  deleteGroup(idGroup: string) {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .delete(`${URL_REQUEST.DELETE_GROUP}/${idGroup}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  obtainSimpleContacts() {
+    const token = localStorage.getItem('token');
+
+    return firstValueFrom(
+      this.httpClient
+        .get(URL_REQUEST.GET_SIMPLE_CONTACTS, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .pipe(finalize(() => {}))
+    );
+  }
+
+  addMessageToGroup({
+    idGroup,
+    message,
+    type = 'text',
+  }: {
+    idGroup: string;
+    message: any;
+    type?: string;
+  }) {
+    const token = localStorage.getItem('token');
+
+    const bodySend = {
+      idGroup,
+      message: {
+        type,
+        content: message,
+      },
+    };
+
+    return firstValueFrom(
+      this.httpClient.post(URL_REQUEST.ADD_MESSAGE_TO_GROUP, bodySend, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
     );
   }
 }

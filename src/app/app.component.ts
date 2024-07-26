@@ -19,7 +19,7 @@ export class AppComponent {
       const url = this.router.url;
       if (url === '/main' || url.startsWith('/auth/login') || url.startsWith('/auth/register')) {
         
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/tabs/chats');
       } else {
         
         this.location.back();

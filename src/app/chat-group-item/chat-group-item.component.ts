@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import {
   IonItem,
   IonLabel,
@@ -26,9 +26,9 @@ import { Router } from '@angular/router';
 import { ChatNotificationService } from '../chat-notification.service';
 
 @Component({
-  selector: 'chat-item',
-  templateUrl: './chat-item.component.html',
-  styleUrls: ['./chat-item.component.scss'],
+  selector: 'group-item',
+  templateUrl: './chat-group-item.component.html',
+  styleUrls: ['./chat-group-item.component.scss'],
   standalone: true,
   imports: [
     IonIcon,
@@ -48,10 +48,33 @@ import { ChatNotificationService } from '../chat-notification.service';
     IonThumbnail,
   ],
 })
-export class ChatItemComponent implements OnInit {
+export class ChatItemComponent implements OnInit, AfterViewInit {
   @Input() chat = DefaultChatItem as any;
 
-  public date = new Date(this.chat.lastMessageContent.date);
+  public date = new Date(this.chat.lastMessage.date);
+
+  public isNotMessage = false;
+
+  constructor(
+    private fetches: FetchesService,
+    private load: LoadingService,
+    private toast: ToastService,
+    private alert: AlertController,
+    private router: Router,
+    private chatNotification: ChatNotificationService,
+    private cdr: ChangeDetectorRef
+  ) {
+    addIcons({ trashOutline });
+  }
+
+  ngOnInit() {
+    console.log('Este es el mensaje inicial');
+  }
+
+  ngAfterViewInit() {
+    // Forzar una nueva verificación de cambios
+    this.cdr.detectChanges();
+  }
 
   getDate() {
     const optionsDate = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -64,7 +87,13 @@ export class ChatItemComponent implements OnInit {
   }
 
   public getLastMessage() {
-    const { type, content } = this.chat.lastMessageContent.message;
+    const { type, content } = this.chat.lastMessage.message;
+
+    if (type === 'text' && content == 'No hay mensajes') {
+      this.isNotMessage = true;
+      return;
+    }
+
     return type === 'text'
       ? content.length > 20
         ? `${content.substring(0, 20)}...`
@@ -72,32 +101,17 @@ export class ChatItemComponent implements OnInit {
       : '';
   }
 
-  constructor(
-    private fetches: FetchesService,
-    private load: LoadingService,
-    private toast: ToastService,
-    private alert: AlertController,
-    private router: Router,
-    private chatNotification : ChatNotificationService
-  ) {
-    addIcons({ trashOutline });
-  }
-
-  ngOnInit() {
-    console.log('Este es el mensaje inicial');
-  }
-
   async deleteChat() {
     try {
       this.load.showLoading('Eliminando chat');
-      const result = await this.fetches.deleteChat(this.chat.id);
+      const result = await this.fetches.deleteGroup(this.chat.id);
       this.load.hideLoading();
 
       if (result) {
         this.toast.showToast({ message: 'Chat eliminado', type: 'success' });
       } else {
         this.toast.showToast({
-          message: 'No se pudo eliminar el chat',
+          message: 'No se pudo eliminar el chat. No eres el dueño del grupo',
           type: 'error',
         });
       }
@@ -110,7 +124,6 @@ export class ChatItemComponent implements OnInit {
     }
 
     this.chatNotification.notifyChatDeletion();
-
   }
 
   public alertButtons = [
@@ -129,6 +142,7 @@ export class ChatItemComponent implements OnInit {
       },
     },
   ];
+
   async presentAlert(event: MouseEvent) {
     event.stopPropagation();
 
@@ -142,58 +156,32 @@ export class ChatItemComponent implements OnInit {
   }
 }
 
-const DefaultChatItem: ChatItem = {
-  idUser: '66880fbf303a3d97891f2f4d',
-  idUserReceiver: '66880fbf303a3d97891f2908',
-  id: '6696a0dcba1e95a977c83f1b',
-  lastMessageContent: {
-    idUserSender: '66880fbf303a3d97891f2f4d',
-    message: {
-      type: 'text',
-      content: 'Como estas amigo',
-    },
-    date: '2024-07-16T21:03:28.308Z',
-    read: false,
-    id: '6696e0204ce10e26a6ba7eff',
-  },
+const DefaultChatItem: GroupData = {
+  id: '',
+  name: '',
+  description: '',
+  idOwner: '',
+  idUsers: [],
+  image: '',
+  lastMessage: '',
   userLastMessage: {
-    userName: 'enmarcm',
-    image:
-      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
-    id: '66880fbf303a3d97891f2f4d',
-  },
-  userReceiver: {
-    userName: 'syragon',
-    image:
-      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
-    id: '66880fbf303a3d97891f2908',
+    id: '',
+    userName: '',
+    image: '',
   },
 };
 
-interface ChatItem {
-  idUser: string;
-  idUserReceiver: string;
+interface GroupData {
   id: string;
-  lastMessageContent: LastMessageContent;
-  userLastMessage: UserLastMessage;
-  userReceiver: UserLastMessage;
-}
-
-interface UserLastMessage {
-  userName: string;
+  name: string;
+  description: string;
+  idOwner: string;
+  idUsers: string[];
   image: string;
-  id: string;
-}
-
-interface LastMessageContent {
-  idUserSender: string;
-  message: Content;
-  date: string;
-  read: boolean;
-  id: string;
-}
-
-interface Content {
-  type: string;
-  content: string;
+  lastMessage: string;
+  userLastMessage: {
+    id: string;
+    userName: string;
+    image: string;
+  };
 }

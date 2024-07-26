@@ -123,7 +123,13 @@ export class StatusesPage implements OnInit {
       const newStatuses =
         (await this.fetchesServices.obtainAllContactsStatus()) as any;
 
-      this.contactStatus = newStatuses.data;
+      //Filtrar los estados que son null
+
+      const filteredStatuses = newStatuses.data.filter(
+        (status: any) => status.status !== null
+      );
+
+      this.contactStatus = filteredStatuses;
       // this.loading.hideLoading();
     } catch (error) {
       console.error(error);
@@ -156,6 +162,7 @@ export class StatusesPage implements OnInit {
     try {
       // this.loading.showLoading('Cargando tu estado');
       const newStatus = (await this.fetchesServices.obtainMyStatuses()) as any;
+      
       this.loading.hideLoading();
 
       this.myInfoStatus = {

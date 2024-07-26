@@ -10,10 +10,8 @@
           </span>
         </ion-title>
       </ion-col>
-      <ion-col size="1" class="flex items-center justify-center">
-        <ion-icon name="search-outline" class="text-2xl text-dark"></ion-icon>
-      </ion-col>
-      <ion-col size="2" class="flex items-center justify-center">
+
+      <ion-col size="3" class="flex items-center justify-end">
         <ion-button id="popover-button" fill="clear">
           <ion-icon
             name="ellipsis-vertical-outline"
@@ -51,7 +49,7 @@
       <ion-icon
         name="person-add-outline"
         color="dark"
-        id="open-modal"
+        id="open-modal-contact"
       ></ion-icon>
     </ion-fab-button>
   </ion-fab-list>
@@ -59,7 +57,7 @@
 
 <ion-modal
   #modal
-  trigger="open-modal"
+  trigger="open-modal-contact"
   [canDismiss]="canDismiss"
   [presentingElement]="presentingElement"
   (willPresent)="onWillPresent()"

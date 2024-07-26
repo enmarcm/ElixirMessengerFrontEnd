@@ -1,0 +1,143 @@
+<ion-header id="open-modal-group-info">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToGroups($event)"></ion-back-button>
+    </ion-buttons>
+
+    <div class="flex py-2">
+      <div>
+        <ion-thumbnail>
+          <img [src]="groupInfo.image" class="h-12 w-12 rounded-full" />
+        </ion-thumbnail>
+      </div>
+
+      <div class="flex-grow flex">
+        <ion-title class="text-dark text-lg">{{groupInfo.name}}</ion-title>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg-gray-200 p-4" [scrollEvents]="true">
+  @if(messages.length > 0){
+  <ion-list class="mb-16" lines="none">
+    @for(message of messages; track trackByFn(message.id)){
+
+      <ion-item class="my-2 w-full">
+        <div
+          class="flex w-full"
+          [ngClass]="{ 'justify-end': message.isSendByMe, 'justify-start': !message.isSendByMe }"
+        >
+          <div class="flex items-center w-full">
+            <!-- Foto del usuario -->
+            <img
+              *ngIf="!message.isSendByMe"
+              [src]="message.senderData.image"
+              alt="User Image"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div class="flex w-full">
+              <div
+                class="max-w-full rounded-xl flex w-full"
+                [class]="message.isSendByMe ? 'bg-blue-600' : 'bg-violet-800'"
+              >
+                @if(message.message.type === 'audio'){
+                <audio
+                  [src]="message.message.content"
+                  controls
+                  class="m-1 w-full"
+                  (play)="playAudio($event)"
+                ></audio>
+                }@else if (message.message.type === 'text') {
+                <div class="p-2 text-white w-full">{{ message.message.content }}</div>
+                }
+              </div>
+            </div>
+            <img
+              *ngIf="message.isSendByMe"
+              [src]="message.senderData.image"
+              alt="User Image"
+              class="w-8 h-8 rounded-full ml-2"
+            />
+          </div>
+        </div>
+      </ion-item>
+    }
+  </ion-list>
+  }
+
+  <ion-item
+    class="fixed inset-x-0 bottom-0 bg-white shadow-2xl p-2 rounded-t-3xl"
+  >
+    <ion-input
+      class="flex-1 border-gray-300 rounded-full p-2"
+      placeholder="Escribe un mensaje..."
+      [(ngModel)]="newMessage"
+      ngDefaultControl
+    ></ion-input>
+
+    <ion-button
+      class="ml-2 text-white rounded-full p-2"
+      shape="round"
+      (click)="toggleRecord()"
+      color="warning"
+    >
+      <ion-icon name="mic-outline"></ion-icon>
+    </ion-button>
+
+    <ion-button
+      class="ml-2 bg-blue-600 text-white rounded-full p-2"
+      (click)="sendMessage()"
+      shape="round"
+      [disabled]="isAudioButton"
+    >
+      <ion-icon name="send"></ion-icon>
+    </ion-button>
+  </ion-item>
+
+  <ion-modal
+    trigger="open-modal-group-info"
+    [initialBreakpoint]="1"
+    [breakpoints]="[0, 1]"
+  >
+    <ng-template>
+      <div>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Información del grupo</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label>Nombre del grupo</ion-label>
+              <p>{{groupInfo.name}}</p>
+            </ion-item>
+            <ion-item>
+              <ion-label>Descripción del grupo</ion-label>
+              <p>{{groupInfo.description}}</p>
+            </ion-item>
+            <ion-item>
+              <ion-label>Imagen del grupo</ion-label>
+
+              <ion-img [src]="groupInfo.image" class="w-24 h-24" />
+            </ion-item>
+
+            <ion-item class="flex flex-col">
+              <ion-label>Integrantes</ion-label>
+              <ion-list>
+                <ion-item *ngFor="let member of groupInfo.users">
+                  <ion-thumbnail>
+                    <img [src]="member.image" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    <h2>{{member.userName}}</h2>
+                    <p>{{member.email}}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

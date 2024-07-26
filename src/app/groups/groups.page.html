@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title><span
+      class="text-4xl font-poppins text-dark font-semibold text-start"
+    >
+      Grupos
+    </span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end" class="z-50">
+  <ion-fab-button color="secondary" (click)="goToNewGroup()">
+    <ion-icon name="create-outline" color="light"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content [fullscreen]="true">
+  @for(group of groups; track group.id){
+  <group-item [chat]="group" (click)="goToGroup(group.id)"/>
+  }
+</ion-content>

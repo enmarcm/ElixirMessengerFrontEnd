@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goToGroups()"></ion-back-button>
+    </ion-buttons>
+    <ion-title size="large">Nuevo grupo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="px-4 py-2">
+    <ion-row class="h-[30%]">
+      <ion-col size="12">
+        <div class="flex flex-col justify-center items-center">
+          <div class="w-36 h-full relative">
+            <ion-img
+              class="rounded-full object-cover w-full h-full min-h-36 min-w-36"
+              [src]="urlImage"
+            ></ion-img>
+            <ion-button
+              class="absolute bottom-0 right-0 mb-2 mr-2"
+              fill="outline"
+            >
+              <ion-icon color="dark" name="pencil-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onFileSelectedImage($event)"
+                class="absolute top-0 left-0 w-full h-full opacity-0"
+              />
+            </ion-button>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="h-[60%]">
+      <ion-col size="12" class="h-full flex flex-col gap-5">
+        <ion-input
+          label="Nombre del grupo"
+          [(ngModel)]="dataInputs.name"
+          ngDefaultControl
+        ></ion-input>
+
+        <ion-input
+          label="Descripción"
+          [(ngModel)]="dataInputs.description"
+          ngDefaultControl
+        ></ion-input>
+
+        <ion-item [button]="true" [detail]="false" id="select-contacts" (click)="verifyContacts()">
+          <ion-label>Contactos</ion-label>
+          <div slot="end" id="selected-contacts">
+            {{ selectedContactsText }}
+          </div>
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          (click)="createGroup()"
+          [disabled]="!dataInputs.name || !dataInputs.description"
+        >
+          Crear grupo</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-modal trigger="select-contacts" #modal>
+  <ng-template>
+    <app-typeahead
+      class="ion-page"
+      title="Contactos"
+      [items]="data"
+      [selectedItems]="selectedContacts"
+      (selectionChange)="contactSelectionChanged($event)"
+      (selectionCancel)="modal.dismiss()"
+    ></app-typeahead>
+  </ng-template>
+</ion-modal>

@@ -11,6 +11,7 @@ import {
   chatbubblesOutline,
   peopleCircleOutline,
   callOutline,
+  peopleOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -24,6 +25,6 @@ export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor() {
-    addIcons({ chatbubblesOutline, peopleCircleOutline, callOutline });
+    addIcons({ chatbubblesOutline, peopleCircleOutline, peopleOutline });
   }
 }

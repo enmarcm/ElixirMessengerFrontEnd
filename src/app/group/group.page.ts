@@ -6,52 +6,52 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonList,
-  IonItem,
-  IonButton,
-  IonInput,
   IonIcon,
-  IonAvatar,
+  IonButton,
+  IonItem,
+  IonList,
   IonButtons,
   IonBackButton,
   IonThumbnail,
   IonModal,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
   IonLabel,
+  IonCardContent,
+  IonCardTitle,
+  IonInput,
+  IonImg,
+  IonCardHeader,
+  IonCard,
 } from '@ionic/angular/standalone';
-import { ChatService } from '../socket.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { ChatService } from '../socket.service';
 import { LoadingService } from '../loading.service';
 import { ToastService } from '../toast.service';
 import { FetchesService } from '../fetches.service';
+import { AudioService } from '../audio.service';
 import { addIcons } from 'ionicons';
 import { micOutline, send } from 'ionicons/icons';
-import { AudioService } from '../audio.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.page.html',
-  styleUrls: ['./chat.page.scss'],
+  selector: 'app-group',
+  templateUrl: './group.page.html',
+  styleUrls: ['./group.page.scss'],
   standalone: true,
   imports: [
-    IonLabel,
-    IonCardContent,
-    IonCardTitle,
-    IonCardHeader,
     IonCard,
+    IonCardHeader,
+    IonImg,
+    IonInput,
+    IonCardTitle,
+    IonCardContent,
+    IonLabel,
     IonModal,
     IonBackButton,
     IonButtons,
-    IonAvatar,
-    IonIcon,
-    IonInput,
-    IonButton,
-    IonItem,
     IonList,
+    IonItem,
+    IonButton,
+    IonIcon,
     IonContent,
     IonHeader,
     IonTitle,
@@ -61,25 +61,22 @@ import { AudioService } from '../audio.service';
     IonThumbnail,
   ],
 })
-export class ChatPage implements OnInit {
-  public messages: any[] = [];
+export class GroupPage implements OnInit {
+  public messages: Array<any> = [];
   public newMessage: string = 'value';
-  public receiverId = '';
+  public groupId = '';
   public chatId = '';
   public isAudioButton = false;
-  public userReceiverInfo = {
-    image:
-      'https://st2.depositphotos.com/47577860/46269/v/450/depositphotos_462698004-stock-illustration-account-avatar-interface-icon-flat.jpg',
-  } as UserInfo;
+  public groupInfo: any = {};
+
   pressTimer: any;
   public isPlayingAudio = false;
-
   @ViewChild(IonContent, { static: false }) content: IonContent = this
     .messages as any;
 
   constructor(
-    private chatService: ChatService,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private chateService: ChatService,
     private loading: LoadingService,
     private toast: ToastService,
     private fetches: FetchesService,
@@ -87,7 +84,7 @@ export class ChatPage implements OnInit {
     private audioService: AudioService
   ) {
     this.newMessage = '';
-    addIcons({ send, micOutline });
+    addIcons({ micOutline, send });
   }
 
   startPress() {
@@ -100,28 +97,45 @@ export class ChatPage implements OnInit {
     this.stopRecording();
   }
 
-  onSwipe(event: any) {
-    if (event.direction === 2) {
-      this.isAudioButton = !this.isAudioButton;
+  toggleRecord() {
+    this.isAudioButton = !this.isAudioButton;
+    if (this.isAudioButton) {
+      this.startRecording();
+    } else {
+      this.stopRecording();
     }
   }
 
   async ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.receiverId = params['idUser'];
-      this.chatId = params['idChat'];
+    this.activatedRoute.params.subscribe((params) => {
+      this.groupId = params['idGroup'];
     });
 
-    await this.obtainMessages();
-    this.obtainUserInfo();
+    await this.loadMessagesGroup();
+    this.obtainGroupInfo();
 
-    this.chatService.socket.on('privateMessage', (message: any) => {
+    this.chateService.socket.on('groupMessage', (message: any) => {
+      console.log('Nuevo mensaje de grupo', message);
+      if (message.message.group !== this.groupId) return;
+      if (message.sender === localStorage.getItem('userId')) return;
+
+
       const newMessage = {
-        ...message,
-        isSendByMe: false,
+       typeMessage: message.message.message.type,
+       message: {
+        content: message.message.message.content,
+        type: message.message.message.type,
+       },
+       senderId: message.sender,
+       senderData:{
+        userName: message.senderData.userName,
+        email: message.senderData.email,
+        image: message.senderData.image,
+        id: message.sender
+       },
+       isSendByMe: false
       };
 
-      console.log('newMessage', newMessage);
       this.messages.push(newMessage);
       this.scrollToBottom();
     });
@@ -132,100 +146,108 @@ export class ChatPage implements OnInit {
     const decoded = jwtDecode(token) as any;
 
     if (this.newMessage.trim()) {
-      const idUser = localStorage.getItem('userId');
+      const idUser = localStorage.getItem('userId') as string;
 
-      if (!idUser)
+      if (!idUser) {
         return this.toast.showToast({
-          message: 'Error al enviar mensaje',
+          message: 'No se ha podido obtener el id del usuario',
           type: 'danger',
+          position: 'top',
         });
+      }
 
       const message = {
         typeMessage: 'text',
         message: {
-          type: 'text',
           content: this.newMessage,
+          type: 'text',
         },
-        senderId: localStorage.getItem('userId'),
-        isSendByMe: true,
+        senderId: idUser,
         senderData: {
           userName: decoded.userName,
           email: decoded.email,
-          role: decoded.role,
+          image: decoded.image,
+          id: decoded.id,
         },
+        isSendByMe: true,
       };
 
       this.addToBDD({
-        idReceiver: this.receiverId,
+        idGroup: this.groupId,
         typeMessage: 'text',
         messageString: message.message.content,
       });
 
-      this.chatService.sendMessage(this.receiverId, this.newMessage);
+      this.chateService.sendGroupMessage(this.groupId, this.newMessage);
 
       this.messages.push(message);
       this.newMessage = '';
       this.scrollToBottom();
     }
+
     return;
   }
 
-  private async obtainUserInfo() {
+  private async obtainGroupInfo() {
     try {
-      const userInfo = (await this.fetches.obtainUserInfo(
-        this.receiverId
-      )) as UserInfo;
+      const groupInfo = await this.fetches.obtainGroupById(this.groupId);
 
-      this.userReceiverInfo = userInfo;
+      this.groupInfo = groupInfo;
     } catch (error) {
+      console.error('Error al obtener la información del grupo', error);
       this.toast.showToast({
-        message: 'Error al obtener información del usuario',
+        message: 'Error al obtener la información del grupo',
         type: 'danger',
+        position: 'top',
       });
-      return;
-    } finally {
-      this.loading.hideLoading();
     }
   }
 
   private async addToBDD({
-    idReceiver,
+    idGroup,
     typeMessage,
     messageString,
   }: {
-    idReceiver: string;
-    typeMessage: typeMessage;
+    idGroup: string;
+    typeMessage: string;
     messageString: string;
   }) {
     try {
-      await this.fetches.addMessage({
-        idReceiver,
-        typeMessage,
-        messageString,
+      await this.fetches.addMessageToGroup({
+        idGroup,
+        type: typeMessage,
+        message: messageString,
       });
     } catch (error) {
       this.toast.showToast({
-        message: 'Error al enviar mensaje',
+        message: 'Error al agregar mensaje a la base de datos',
         type: 'danger',
+        position: 'top',
       });
     }
   }
 
-  private async obtainMessages() {
+  private async loadMessagesGroup() {
+    this.loading.showLoading('Obteniendo mensajes');
     try {
-      this.loading.showLoading('Obteniendo los mensajes');
-      const messages = (await this.fetches.obtainMessagesByChatId({
-        idChat: this.chatId,
-      })) as Array<any>;
-      this.loading.hideLoading();
+      const messages = (await this.fetches.obtainGroupMessages(
+        this.groupId
+      )) as any[];
 
-      this.messages = messages;
+      this.messages = messages.map((message) => ({
+        ...message,
+        isSendByMe: message.senderData.id === localStorage.getItem('userId'),
+      }));
       this.scrollToBottom();
     } catch (error) {
+      console.error('Error al obtener mensajes', error);
       this.toast.showToast({
         message: 'Error al obtener mensajes',
         type: 'danger',
+        position: 'top',
       });
+    } finally {
+      this.loading.hideLoading();
     }
   }
 
@@ -235,17 +257,9 @@ export class ChatPage implements OnInit {
     }, 100);
   }
 
-  goToChats(event: any) {
+  goToGroups(event: any) {
     event.stopPropagation();
     this.router.navigate(['/tabs/chats']);
-  }
-
-  toggleRecord() {
-    if (this.isAudioButton) {
-      this.stopPress();
-    } else {
-      this.startPress();
-    }
   }
 
   sendMessageAudio(url: string) {
@@ -277,12 +291,12 @@ export class ChatPage implements OnInit {
       };
 
       this.addToBDD({
-        idReceiver: this.receiverId,
+        idGroup: this.groupId,
         typeMessage: 'audio',
         messageString: message.message.content,
       });
 
-      this.chatService.sendMessage(this.receiverId, url, 'audio');
+      this.chateService.sendGroupMessage(this.groupId, url, 'audio');
 
       this.messages.push(message);
       this.newMessage = '';
@@ -309,7 +323,7 @@ export class ChatPage implements OnInit {
   }
 
   trackByFn(id: string) {
-    const randomCrypt = crypto.getRandomValues(new Uint32Array(1))[0] & 0x3f;
+    const randomCrypt = crypto.randomUUID();
     return `${randomCrypt}_${id}`;
   }
 
@@ -323,8 +337,6 @@ export class ChatPage implements OnInit {
     });
   }
 }
-
-type typeMessage = 'text' | 'image' | 'audio';
 
 interface UserInfo {
   userName: string;

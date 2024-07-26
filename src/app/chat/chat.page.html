@@ -1,7 +1,7 @@
-<ion-header>
+<ion-header id="open-modal-info">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="goToChats()"></ion-back-button>
+      <ion-back-button (click)="goToChats($event)"></ion-back-button>
     </ion-buttons>
 
     <div class="flex py-2">
@@ -53,6 +53,7 @@
       class="flex-1 border-gray-300 rounded-full p-2"
       placeholder="Escribe un mensaje..."
       [(ngModel)]="newMessage"
+      ngDefaultControl
     ></ion-input>
 
 
@@ -75,4 +76,30 @@
       <ion-icon name="send"></ion-icon>
     </ion-button>
   </ion-item>
+
+  <ion-modal trigger="open-modal-info" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+    <ng-template>
+      
+      <div>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Información del usuario</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-item>
+              <ion-thumbnail>
+                <img [src]="userReceiverInfo.image" />
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{userReceiverInfo.userName}}</h2>
+                <p>{{userReceiverInfo.email}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+    </ng-template>
+  </ion-modal>
 </ion-content>
